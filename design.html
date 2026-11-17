@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="ru" data-type="software" data-motion="on">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Будущее искусственного интеллекта — презентация</title>
+<meta name="description" content="Короткая презентация о том, куда движется искусственный интеллект: история, направления, риски и правила.">
+<meta name="theme-color" content="#070b14">
+<meta name="page-type" content="software">
+<meta name="site-kind" content="software">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Палитра: глубокий ночной синий + бирюза, электрический синий и янтарь. Без фиолетового. */
+  :root{
+    --bg:#070b14; --bg-2:#0b1222; --ink:#eef3fb; --muted:#9aa8bf; --line:rgba(255,255,255,.10);
+    --teal:#2dd4bf; --blue:#3b82f6; --amber:#f5a524;
+    --glass:rgba(255,255,255,.055); --glass-hi:rgba(255,255,255,.09);
+    --r:20px; --wrap:min(1200px, 100% - 2*clamp(20px,5vw,64px));
+    --f-head:"Unbounded", system-ui, sans-serif; --f-body:"Onest", system-ui, sans-serif;
+    --ease:cubic-bezier(.2,.7,.2,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;background:var(--bg)}
+  body{font-family:var(--f-body);color:var(--ink);background:var(--bg);line-height:1.55;font-size:17px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{width:var(--wrap);margin-inline:auto}
+  .skip{position:fixed;left:16px;top:-60px;z-index:100;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:600}
+  .skip:focus{top:16px}
+  :focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:6px}
+
+  /* ---------- Фон: живые градиенты ---------- */
+  .aurora{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:
+      radial-gradient(1200px 800px at 80% -10%, #0e2140 0%, transparent 60%),
+      radial-gradient(900px 700px at -10% 110%, #082a2a 0%, transparent 60%), var(--bg)}
+  .aurora i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;mix-blend-mode:screen;animation:drift 26s ease-in-out infinite alternate}
+  .aurora i:nth-child(1){width:46vw;height:46vw;left:-8vw;top:-10vw;background:radial-gradient(circle,#0f766e,transparent 65%)}
+  .aurora i:nth-child(2){width:40vw;height:40vw;right:-10vw;top:20vh;background:radial-gradient(circle,#1d4ed8,transparent 65%);animation-duration:32s;animation-delay:-8s}
+  .aurora i:nth-child(3){width:30vw;height:30vw;left:35vw;bottom:-12vw;background:radial-gradient(circle,#b45309,transparent 65%);opacity:.35;animation-duration:38s;animation-delay:-15s}
+  @keyframes drift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,4vh) scale(1.12)}100%{transform:translate(-4vw,-3vh) scale(.95)}}
+  .grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;
+      background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+      background-size:64px 64px;mask-image:radial-gradient(ellipse at 50% 30%,#000 20%,transparent 75%)}
+
+  /* ---------- Стекло ---------- */
+  .glass{background:linear-gradient(160deg,var(--glass-hi),var(--glass));border:1px solid var(--line);
+      backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);
+      border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 20px 50px -20px rgba(0,0,0,.6)}
+
+  /* ---------- Навигация ---------- */
+  header{position:fixed;inset:16px 0 auto;z-index:50}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 12px 10px 20px;border-radius:999px}
+  .mark{display:flex;align-items:center;gap:10px;font-family:var(--f-head);font-weight:600;font-size:15px;text-decoration:none;letter-spacing:.02em}
+  .mark b{width:26px;height:26px;border-radius:50%;background:conic-gradient(from 200deg,var(--teal),var(--blue),var(--amber),var(--teal));box-shadow:0 0 20px rgba(45,212,191,.5)}
+  .nav ul{display:flex;gap:4px;list-style:none}
+  .nav ul a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;text-decoration:none;color:var(--muted);font-size:15px;transition:color .2s,background .2s}
+  .nav ul a:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+  @media (max-width:820px){.nav ul{display:none}}
+
+  /* ---------- Кнопки ---------- */
+  .btn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 22px;border-radius:999px;font:600 16px var(--f-body);text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .2s var(--ease),box-shadow .25s,background .25s}
+  .btn-main{background:linear-gradient(120deg,var(--teal),var(--blue));color:#04121a;box-shadow:0 10px 30px -10px rgba(45,212,191,.7)}
+  .btn-main:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px rgba(45,212,191,.85)}
+  .btn-ghost{border-color:var(--line);background:rgba(255,255,255,.04);color:var(--ink)}
+  .btn-ghost:hover{transform:translateY(-2px);background:rgba(255,255,255,.08)}
+  .btn:active{transform:translateY(0) scale(.97)}
+  .btn svg{transition:transform .25s var(--ease)}
+  .btn:hover svg{transform:translateX(3px)}
+
+  /* ---------- Секции: одна на экран ---------- */
+  main>section{min-height:100svh;display:flex;align-items:center;padding:120px 0 80px;position:relative}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:22px}
+  .eyebrow::before{content:"";width:28px;height:1px;background:currentColor}
+  h1,h2,h3{font-family:var(--f-head);font-weight:600;letter-spacing:-.02em;line-height:1.08}
+  h2{font-size:clamp(32px,4.4vw,60px);max-width:16ch;margin-bottom:20px}
+  h2 .dim{color:var(--muted)}
+  .lead{color:var(--muted);font-size:clamp(17px,1.4vw,20px);max-width:56ch}
+  .grad{background:linear-gradient(100deg,var(--teal) 10%,var(--blue) 55%,var(--amber) 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* ---------- Hero ---------- */
+  .hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,5vw,72px);align-items:center}
+  .hero h1{font-size:clamp(40px,6.4vw,96px);margin-bottom:28px}
+  .hero h1 .w{display:inline-block;opacity:0;transform:translateY(.45em);filter:blur(10px);animation:wordIn 1s var(--ease) forwards}
+  @keyframes wordIn{to{opacity:1;transform:none;filter:blur(0)}}
+  .fade{opacity:0;transform:translateY(14px);animation:wordIn .9s var(--ease) forwards}
+  .hero .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+  .fact{margin-top:40px;display:flex;gap:14px;align-items:center;color:var(--muted);font-size:15px}
+  .fact strong{font-family:var(--f-head);color:var(--ink);font-size:28px;font-weight:600}
+
+  /* Визуал hero: «нейросеть» из узлов с бегущими импульсами */
+  .orb{aspect-ratio:1;position:relative;padding:28px;display:grid;place-items:center}
+  .orb svg{width:100%;height:100%;overflow:visible}
+  .orb .edge{stroke:rgba(255,255,255,.12);stroke-width:1}
+  .orb .pulse{stroke:url(#pg);stroke-width:2;fill:none;stroke-linecap:round;stroke-dasharray:14 220;animation:run 3.2s linear infinite}
+  .orb .node{fill:#0b1730;stroke:rgba(255,255,255,.25)}
+  .orb .core{fill:url(#cg);filter:drop-shadow(0 0 24px rgba(45,212,191,.6));animation:breathe 3.6s ease-in-out infinite;transform-origin:200px 200px}
+  @keyframes run{from{stroke-dashoffset:234}to{stroke-dashoffset:0}}
+  @keyframes breathe{50%{transform:scale(1.08)}}
+  .orb-tag{position:absolute;padding:10px 14px;font-size:13px;color:var(--ink);border-radius:14px;white-space:nowrap}
+  .orb-tag span{color:var(--teal);margin-right:6px}
+  .orb-tag.t1{top:6%;left:-4%}.orb-tag.t2{bottom:12%;right:-6%}.orb-tag.t3{bottom:4%;left:6%}
+
+  /* ---------- Хронология ---------- */
+  .timeline{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:56px;position:relative}
+  .timeline::before{content:"";position:absolute;left:0;right:0;top:30px;height:1px;background:linear-gradient(90deg,transparent,var(--teal),var(--blue),var(--amber),transparent);opacity:.5}
+  .step{padding:22px 18px 24px;transition:transform .25s var(--ease),background .25s}
+  .step:hover{transform:translateY(-2px);background:linear-gradient(160deg,rgba(255,255,255,.12),var(--glass))}
+  .step .yr{font-family:var(--f-head);font-size:22px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .step .yr::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--teal);box-shadow:0 0 14px var(--teal)}
+  .step:nth-child(n+4) .yr::before{background:var(--blue);box-shadow:0 0 14px var(--blue)}
+  .step:last-child .yr::before{background:var(--amber);box-shadow:0 0 14px var(--amber)}
+  .step h3{font-size:15px;font-family:var(--f-body);font-weight:600;margin-bottom:6px;letter-spacing:0}
+  .step p{color:var(--muted);font-size:14.5px;line-height:1.5}
+  @media (max-width:1024px){.timeline{grid-template-columns:repeat(3,1fr)}.timeline::before{display:none}}
+  @media (max-width:560px){.timeline{grid-template-columns:1fr}}
+
+  /* ---------- Момент: слова подсвечиваются при прокрутке ---------- */
+  .statement{min-height:200svh!important;align-items:flex-start!important}
+  .statement .sticky{position:sticky;top:0;min-height:100svh;display:flex;align-items:center;width:100%}
+  .statement p{font-family:var(--f-head);font-weight:600;font-size:clamp(28px,4.2vw,62px);line-height:1.18;letter-spacing:-.02em;max-width:22ch}
+  .statement p span{color:rgba(238,243,251,.14);transition:color .35s}
+  .statement p span.on{color:var(--ink)}
+  .statement p span.on.hl{color:var(--teal)}
+
+  /* ---------- Направления ---------- */
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px}
+  .card{padding:22px;display:flex;flex-direction:column;gap:14px;transition:transform .25s var(--ease),border-color .25s}
+  .card:hover{transform:translateY(-2px);border-color:rgba(45,212,191,.35)}
+  .card .viz{height:130px;border-radius:14px;background:radial-gradient(120% 100% at 50% 0%,rgba(59,130,246,.18),rgba(255,255,255,.02));border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
+  .card .viz svg{width:100%;height:100%}
+  .card h3{font-size:19px}
+  .card p{color:var(--muted);font-size:15px}
+  .viz .ln{stroke:rgba(255,255,255,.18);fill:none}
+  .viz .pl{fill:none;stroke-width:2;stroke-linecap:round;stroke-dasharray:10 160;animation:run2 3s linear infinite}
+  .viz .pl.b{animation-delay:-1s}.viz .pl.c{animation-delay:-2s}
+  @keyframes run2{from{stroke-dashoffset:170}to{stroke-dashoffset:0}}
+  .viz .hub{fill:#0b1730;stroke:var(--teal);stroke-width:1.5}
+  .viz .dot{fill:#0b1730;stroke:rgba(255,255,255,.35)}
+  .viz .bar{fill:var(--blue);opacity:.75;transform-origin:bottom;transform-box:fill-box;animation:grow 3.4s var(--ease) infinite}
+  @keyframes grow{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+  @media (max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.cards{grid-template-columns:1fr}}
+
+  /* ---------- Риски ---------- */
+  .split{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,5vw,72px);align-items:center}
+  .risks{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .risk{padding:24px;transition:transform .25s var(--ease)}
+  .risk:hover{transform:translateY(-2px)}
+  .risk .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;margin-bottom:16px;background:rgba(245,165,36,.12);color:var(--amber);border:1px solid rgba(245,165,36,.25)}
+  .risk:nth-child(even) .ic{background:rgba(45,212,191,.1);color:var(--teal);border-color:rgba(45,212,191,.25)}
+  .risk h3{font-size:17px;margin-bottom:8px}
+  .risk p{color:var(--muted);font-size:15px}
+  @media (max-width:900px){.split{grid-template-columns:1fr}}
+  @media (max-width:560px){.risks{grid-template-columns:1fr}}
+
+  /* ---------- Финал ---------- */
+  .close{text-align:left}
+  .close .big{font-family:var(--f-head);font-weight:700;font-size:clamp(44px,9vw,150px);line-height:.98;letter-spacing:-.04em;margin-bottom:36px}
+  .close .panel{display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between;padding:28px 32px}
+  .close .panel p{color:var(--muted);max-width:52ch}
+  footer{border-top:1px solid var(--line);padding:28px 0 36px;color:var(--muted);font-size:14px}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  /* ---------- Мобильные ---------- */
+  @media (max-width:900px){
+    .hero .wrap{grid-template-columns:1fr}
+    .orb{max-width:420px;width:100%;margin-inline:auto}
+    .orb-tag.t1{left:0}.orb-tag.t2{right:0}
+  }
+  @media (max-width:560px){
+    .hero .actions .btn{width:100%;justify-content:center}
+    .close .panel .btn{width:100%;justify-content:center}
+    .orb-tag{font-size:12px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .hero h1 .w,.fade{opacity:1;transform:none;filter:none}
+    .statement p span{color:var(--ink)}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Перейти к содержанию</a>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header>
+  <div class="wrap">
+    <nav class="nav glass" aria-label="Разделы">
+      <a class="mark" href="#top"><b aria-hidden="true"></b>ИИ · 2030</a>
+      <ul>
+        <li><a href="#history">История</a></li>
+        <li><a href="#directions">Направления</a></li>
+        <li><a href="#risks">Риски</a></li>
+        <li><a href="#next">Что дальше</a></li>
+      </ul>
+      <a class="btn btn-ghost" href="#history" style="min-height:44px;padding:0 18px">Начать</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <!-- 1. Hero -->
+  <section class="hero" id="top" data-enter>
+    <div class="wrap">
+      <div>
+        <div class="eyebrow fade" style="animation-delay:.1s">Презентация · 6 слайдов</div>
+        <h1 aria-label="Будущее искусственного интеллекта">
+          <span class="w" style="animation-delay:.2s">Будущее</span>
+          <span class="w grad" style="animation-delay:.35s">искусственного</span>
+          <span class="w" style="animation-delay:.5s">интеллекта</span>
+        </h1>
+        <p class="lead fade" style="animation-delay:.75s">Как модели научились писать, видеть и рассуждать — и что изменится, когда они начнут действовать сами: в науке, медицине и обычной работе.</p>
+        <div class="actions fade" style="animation-delay:.9s">
+          <a class="btn btn-main" href="#history">Смотреть презентацию
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost" href="#directions">Перейти к направлениям</a>
+        </div>
+        <div class="fact fade" style="animation-delay:1.05s">
+          <strong>2017</strong><span>год статьи «Attention Is All You Need» —<br>с неё началась эпоха трансформеров</span>
+        </div>
+      </div>
+
+      <div class="orb fade" style="animation-delay:.5s" aria-hidden="true">
+        <svg viewBox="0 0 400 400">
+          <defs>
+            <linearGradient id="pg" x1="0" x2="1"><stop offset="0" stop-color="#2dd4bf"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+            <radialGradient id="cg"><stop offset="0" stop-color="#5eead4"/><stop offset=".6" stop-color="#0ea5a4"/><stop offset="1" stop-color="#1d4ed8"/></radialGradient>
+          </defs>
+          <circle cx="200" cy="200" r="170" fill="none" stroke="rgba(255,255,255,.06)"/>
+          <circle cx="200" cy="200" r="120" fill="none" stroke="rgba(255,255,255,.06)" stroke-dasharray="3 6"/>
+          <g id="edges"></g>
+          <circle class="core" cx="200" cy="200" r="34"/>
+          <g id="nodes"></g>
+        </svg>
+        <div class="orb-tag glass t1"><span>●</span>Текст · изображение · звук</div>
+        <div class="orb-tag glass t2"><span>●</span>Агенты выполняют задачи</div>
+        <div class="orb-tag glass t3"><span>●</span>Модели помогают науке</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. История -->
+  <section id="history">
+    <div class="wrap">
+      <div class="eyebrow">01 · Как мы сюда пришли</div>
+      <h2>Семьдесят лет пути. <span class="dim">Главное — за последние десять.</span></h2>
+      <p class="lead">Идеи старые, но рывок случился, когда сошлись три вещи: большие данные, мощные видеокарты и архитектура трансформера.</p>
+      <div class="timeline">
+        <article class="step glass"><div class="yr">1956</div><h3>Дартмутский семинар</h3><p>Появляется сам термин «искусственный интеллект».</p></article>
+        <article class="step glass"><div class="yr">1997</div><h3>Deep Blue</h3><p>Компьютер IBM обыгрывает Гарри Каспарова в шахматном матче.</p></article>
+        <article class="step glass"><div class="yr">2012</div><h3>AlexNet</h3><p>Глубокая нейросеть побеждает в конкурсе ImageNet с большим отрывом.</p></article>
+        <article class="step glass"><div class="yr">2017</div><h3>Трансформер</h3><p>Механизм внимания становится основой языковых моделей.</p></article>
+        <article class="step glass"><div class="yr">2022</div><h3>ChatGPT</h3><p>Языковая модель становится массовым продуктом.</p></article>
+        <article class="step glass"><div class="yr">2024</div><h3>AI Act</h3><p>В ЕС вступает в силу первый крупный закон об ИИ.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Момент: тезис -->
+  <section class="statement" id="thesis" aria-label="Главный тезис">
+    <div class="sticky">
+      <div class="wrap">
+        <div class="eyebrow">02 · Главный тезис</div>
+        <p id="words">ИИ перестаёт быть отдельной программой и становится слоем, через который мы работаем с информацией, наукой и друг с другом.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Направления -->
+  <section id="directions">
+    <div class="wrap">
+      <div class="eyebrow">03 · Куда движется ИИ</div>
+      <h2>Четыре направления, <span class="dim">которые изменят ближайшие годы.</span></h2>
+      <div class="cards">
+        <article class="card glass">
+          <div class="viz" aria-hidden="true">
+            <svg viewBox="0 0 240 130">
+              <path class="ln" d="M40 65 H100 M140 65 L200 25 M140 65 H200 M140 65 L200 105"/>
+              <path class="pl" stroke="#2dd4bf" d="M40 65 H100"/>
+              <path class="pl" stroke="#2dd4bf" d="M140 65 L200 25"/>
+              <path class="pl b" stroke="#3b82f6" d="M140 65 H200"/>
+              <path class="pl c" stroke="#f5a524" d="M140 65 L200 105"/>
+              <circle class="dot" cx="32" cy="65" r="8"/><rect class="hub" x="100" y="47" width="40" height="36" rx="10"/>
+              <circle class="dot" cx="206" cy="25" r="7"/><circle class="dot" cx="206" cy="65" r="7"/><circle class="dot" cx="206" cy="105" r="7"/>
+            </svg>
+          </div>
+          <h3>Агенты</h3>
+          <p>Модели не только отвечают, но и выполняют многошаговые задачи: пишут код, ищут данные, заполняют формы.</p>
+        </article>
+        <article class="card glass">
+          <div class="viz" aria-hidden="true">
+            <svg viewBox="0 0 240 130">
+              <g fill="none" stroke-width="2" stroke-linecap="round">
+                <path d="M70 20 C170 45 70 85 170 110" stroke="#2dd4bf" opacity=".85"/>
+                <path d="M170 20 C70 45 170 85 70 110" stroke="#3b82f6" opacity=".85"/>
+              </g>
+              <g stroke="rgba(255,255,255,.25)"><path d="M88 28H152M98 50H142M98 80H142M88 102H152"/></g>
+              <circle r="4" fill="#f5a524"><animateMotion dur="3s" repeatCount="indefinite" path="M70 20 C170 45 70 85 170 110"/></circle>
+            </svg>
+          </div>
+          <h3>Наука</h3>
+          <p>AlphaFold предсказал структуры около 200 миллионов белков. Дальше — материалы, лекарства, климат.</p>
+        </article>
+        <article class="card glass">
+          <div class="viz" aria-hidden="true">
+            <svg viewBox="0 0 240 130">
+              <path class="ln" d="M20 70 H70 L82 40 L96 100 L110 30 L124 85 L134 70 H220"/>
+              <path class="pl" stroke="#2dd4bf" style="stroke-dasharray:40 400" d="M20 70 H70 L82 40 L96 100 L110 30 L124 85 L134 70 H220"/>
+            </svg>
+          </div>
+          <h3>Медицина</h3>
+          <p>Модели помогают читать снимки, находить редкие диагнозы и разгружать врачей от бумажной работы.</p>
+        </article>
+        <article class="card glass">
+          <div class="viz" aria-hidden="true">
+            <svg viewBox="0 0 240 130">
+              <g><rect class="bar" x="40" y="30" width="14" height="70" rx="4"/>
+                 <rect class="bar" x="64" y="30" width="14" height="70" rx="4" style="animation-delay:-.6s;fill:#2dd4bf"/>
+                 <rect class="bar" x="88" y="30" width="14" height="70" rx="4" style="animation-delay:-1.2s"/>
+                 <rect class="bar" x="112" y="30" width="14" height="70" rx="4" style="animation-delay:-1.8s;fill:#f5a524"/>
+                 <rect class="bar" x="136" y="30" width="14" height="70" rx="4" style="animation-delay:-2.4s"/>
+                 <rect class="bar" x="160" y="30" width="14" height="70" rx="4" style="animation-delay:-3s;fill:#2dd4bf"/>
+                 <rect class="bar" x="184" y="30" width="14" height="70" rx="4" style="animation-delay:-1s"/></g>
+            </svg>
+          </div>
+          <h3>Мультимодальность</h3>
+          <p>Одна модель понимает текст, голос, фото и видео — и общается с нами так же, как человек.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Риски -->
+  <section id="risks">
+    <div class="wrap split">
+      <div>
+        <div class="eyebrow">04 · Цена прогресса</div>
+        <h2>Риски, <span class="dim">о которых говорят всерьёз.</span></h2>
+        <p class="lead">Будущее ИИ зависит не только от мощности моделей, но и от того, насколько им можно доверять.</p>
+      </div>
+      <div class="risks">
+        <article class="risk glass">
+          <div class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div>
+          <h3>Энергия</h3><p>Обучение и работа больших моделей требуют всё больше дата-центров и электричества.</p>
+        </article>
+        <article class="risk glass">
+          <div class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></div>
+          <h3>Ошибки</h3><p>Модели уверенно выдумывают факты. Проверка ответов остаётся задачей человека.</p>
+        </article>
+        <article class="risk glass">
+          <div class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-8 0v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg></div>
+          <h3>Работа</h3><p>Профессии меняются быстрее, чем системы образования успевают за ними.</p>
+        </article>
+        <article class="risk glass">
+          <div class="ic" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg></div>
+          <h3>Правила</h3><p>Государства только начинают регулировать ИИ, и подходы в разных странах сильно отличаются.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Финал -->
+  <section class="close" id="next">
+    <div class="wrap">
+      <div class="eyebrow">05 · Что дальше</div>
+      <div class="big">Будущее<br><span class="grad">пишем мы.</span></div>
+      <div class="panel glass">
+        <p>ИИ станет таким, каким его сделают люди, которые его создают, регулируют и каждый день им пользуются. Главный навык ближайших лет — понимать, что модель умеет, а что нет.</p>
+        <a class="btn btn-main" href="#top">Вернуться к началу
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span>«Будущее искусственного интеллекта» · презентация</span><span>2026</span></div>
+</footer>
+
+<script>
+  // Узлы и рёбра «нейросети» в hero
+  (function(){
+    const ns="http://www.w3.org/2000/svg", E=document.getElementById("edges"), N=document.getElementById("nodes");
+    const pts=[];
+    [[8,120],[12,170]].forEach(([n,r],k)=>{for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+(k?.2:0);pts.push([200+Math.cos(a)*r,200+Math.sin(a)*r,k])}});
+    pts.forEach(([x,y,k],i)=>{
+      const l=document.createElementNS(ns,"line");
+      l.setAttribute("x1",200);l.setAttribute("y1",200);l.setAttribute("x2",x);l.setAttribute("y2",y);l.setAttribute("class","edge");E.appendChild(l);
+      if(i%2===0){const p=document.createElementNS(ns,"path");p.setAttribute("d",`M200 200 L${x} ${y}`);p.setAttribute("class","pulse");p.style.animationDelay=(-i*.37)+"s";E.appendChild(p)}
+      const c=document.createElementNS(ns,"circle");c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",k?5:7);c.setAttribute("class","node");N.appendChild(c);
+    });
+  })();
+
+  // Слова тезиса подсвечиваются по мере прокрутки внутри своей секции
+  (function(){
+    const p=document.getElementById("words"), sec=document.getElementById("thesis");
+    const accent=new Set(["слоем,","информацией,","наукой"]);
+    p.innerHTML=p.textContent.trim().split(/\s+/).map(w=>`<span${accent.has(w)?' class="hl"':''}>${w}</span>`).join(" ");
+    const spans=[...p.children];
+    if(matchMedia("(prefers-reduced-motion: reduce)").matches){spans.forEach(s=>s.classList.add("on"));return}
+    function update(){
+      const r=sec.getBoundingClientRect(), total=r.height-innerHeight;
+      const t=Math.min(1,Math.max(0,(-r.top+innerHeight*.35)/(total||1)));
+      const n=Math.round(t*spans.length);
+      spans.forEach((s,i)=>s.classList.toggle("on",i<n));
+    }
+    addEventListener("scroll",update,{passive:true});addEventListener("resize",update);update();
+  })();
+</script>
+</body>
+</html>

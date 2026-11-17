@@ -1,0 +1,1326 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Как ты? — простыми словами о психологическом здоровье</title>
+<meta name="description" content="Тёплый и простой рассказ о психологическом здоровье: стресс, тревога, выгорание, эмоции, границы. Плюс две практики, которые можно попробовать прямо сейчас.">
+<meta name="theme-color" content="#0E1330">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Плавный скролл. Если CDN недоступен, страница работает на нативной прокрутке. -->
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<style>
+/* =========================================================
+   ДИЗАЙН-СИСТЕМА
+   ========================================================= */
+:root{
+  --night:#0E1330; --lavender:#B9A7FF; --peach:#FFB89A; --mint:#9FE3C8; --milk:#F6F1EA;
+  --lavender-deep:#5442B8;
+  --f-head:"Unbounded",system-ui,sans-serif; --f-body:"Manrope",system-ui,sans-serif;
+  --r-lg:32px; --r-md:24px; --r-sm:16px;
+  --wrap:min(1180px, 100% - 2*clamp(20px,5vw,64px));
+  --ease:cubic-bezier(.22,.8,.26,1);
+  --ease-soft:cubic-bezier(.45,0,.2,1);
+}
+[data-theme="dark"]{--ink:#F6F1EA;--muted:#CBCDE3;--accent:#B9A7FF;--card:rgba(255,255,255,.07);--card-hi:rgba(255,255,255,.12);--line:rgba(255,255,255,.16);--shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+[data-theme="light"]{--ink:#0E1330;--muted:#3E4366;--accent:#5442B8;--card:rgba(255,255,255,.5);--card-hi:rgba(255,255,255,.72);--line:rgba(14,19,48,.12);--shadow:0 30px 60px -30px rgba(80,50,40,.35)}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{font-family:var(--f-body);font-size:17px;line-height:1.6;color:var(--ink);background:var(--night);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,svg{display:block}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.wrap{width:var(--wrap);margin-inline:auto}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--mint);outline-offset:4px;border-radius:12px}
+.skip{position:fixed;left:16px;top:-80px;z-index:1000;background:var(--milk);color:var(--night);padding:12px 18px;border-radius:14px;font-weight:700;text-decoration:none;transition:top .2s}
+.skip:focus{top:16px}
+
+/* =========================================================
+   ФОН: слои неба, блобы, шум
+   ========================================================= */
+.sky{position:fixed;inset:0;z-index:-3;pointer-events:none}
+.sky div{position:absolute;inset:0;opacity:0;will-change:opacity}
+.sky div:first-child{opacity:1}
+.blobs{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+.blob{position:absolute;will-change:transform}
+.blob svg{width:100%;height:100%;opacity:.5}
+.blob.b1{width:52vmax;height:52vmax;left:-14vmax;top:-12vmax}
+.blob.b2{width:44vmax;height:44vmax;right:-16vmax;top:30vh}
+.blob.b3{width:38vmax;height:38vmax;left:20vw;top:90vh}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* =========================================================
+   ПРОГРЕСС, КУРСОР, ШАПКА
+   ========================================================= */
+.progress{position:fixed;left:0;top:0;height:3px;width:100%;z-index:200;transform-origin:0 50%;transform:scaleX(0);
+  background:linear-gradient(90deg,var(--lavender),var(--peach),var(--mint))}
+.cursor-dot,.cursor-cloud{position:fixed;left:0;top:0;z-index:999;pointer-events:none;border-radius:50%;opacity:0;transition:opacity .3s}
+.cursor-dot{width:8px;height:8px;margin:-4px 0 0 -4px;background:var(--milk);mix-blend-mode:difference}
+.cursor-cloud{width:44px;height:44px;margin:-22px 0 0 -22px;background:radial-gradient(circle,rgba(185,167,255,.45),rgba(255,184,154,.15) 60%,transparent 70%);transition:opacity .3s,width .35s var(--ease),height .35s var(--ease),margin .35s var(--ease)}
+.has-cursor .cursor-dot,.has-cursor .cursor-cloud{opacity:1}
+.has-cursor .cursor-cloud.big{width:84px;height:84px;margin:-42px 0 0 -42px}
+.has-cursor, .has-cursor a, .has-cursor button, .has-cursor label{cursor:none}
+.has-cursor input[type=range]{cursor:none}
+
+header.top{position:fixed;inset:14px 0 auto;z-index:100;transition:color .4s}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 8px 8px 20px;border-radius:999px;
+  background:var(--card);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--ink);transition:background .5s,color .5s,border-color .5s}
+.logo{font-family:var(--f-head);font-weight:600;font-size:17px;text-decoration:none;display:flex;align-items:center;gap:10px;min-height:44px}
+.logo i{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--peach),var(--lavender) 70%);animation:breathe 8s var(--ease-soft) infinite}
+.nav ul{display:flex;list-style:none;gap:2px}
+.nav ul a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;text-decoration:none;font-weight:600;font-size:15px;transition:background .25s}
+.nav ul a:hover{background:var(--card-hi)}
+.nav .nav-help{background:var(--ink);color:var(--night)}
+[data-theme="light"] .nav .nav-help{color:var(--milk)}
+@media (max-width:860px){.nav ul li:not(:last-child){display:none}}
+
+/* =========================================================
+   ОБЩИЕ ЭЛЕМЕНТЫ
+   ========================================================= */
+main>section{position:relative;padding:clamp(96px,14vh,140px) 0}
+.screen{min-height:100svh;display:flex;align-items:center}
+.kicker{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+.kicker::before{content:"";width:26px;height:2px;border-radius:2px;background:currentColor}
+h1,h2,h3{font-family:var(--f-head);font-weight:600;line-height:1.1;letter-spacing:-.02em}
+h2{font-size:clamp(30px,5vw,60px);max-width:18ch;margin-bottom:22px}
+h3{font-size:clamp(20px,2vw,24px);margin-bottom:10px}
+p{max-width:40ch}
+.lead{font-size:clamp(18px,1.6vw,21px);color:var(--muted)}
+.muted{color:var(--muted)}
+/* Каждая секция сама задаёт цвет текста по своей теме — иначе на светлом фоне текст оставался белым */
+[data-theme]{color:var(--ink)}
+.glass{background:linear-gradient(160deg,var(--card-hi),var(--card));border:1px solid var(--line);border-radius:var(--r-lg);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+/* Карточки ленты едут при скролле — для них стекло без backdrop-filter, чуть плотнее */
+.topic.glass{backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.06))}
+@media (pointer:coarse){.glass,.nav{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}[data-theme=dark] .glass{background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.06))}[data-theme=light] .glass{background:linear-gradient(160deg,rgba(255,255,255,.8),rgba(255,255,255,.6))}}
+
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 28px;border-radius:999px;
+  font-weight:700;font-size:16px;text-decoration:none;transition:box-shadow .3s,background .3s;will-change:transform;isolation:isolate}
+.btn-main{background:linear-gradient(120deg,var(--lavender),var(--peach));color:var(--night);box-shadow:0 14px 34px -14px rgba(255,184,154,.8)}
+.btn-main:hover{box-shadow:0 20px 44px -14px rgba(255,184,154,.95)}
+.btn-soft{background:var(--card-hi);border:1px solid var(--line);color:var(--ink)}
+.btn:active .btn-in{transform:scale(.96)}
+.btn-in{display:inline-flex;align-items:center;gap:10px;transition:transform .2s var(--ease)}
+.btn svg{transition:transform .3s var(--ease)}
+.btn:hover svg{transform:translateY(2px)}
+.ripple{position:absolute;border-radius:50%;pointer-events:none;background:rgba(255,255,255,.55);transform:scale(0);animation:ripple .7s var(--ease) forwards;z-index:-1}
+@keyframes ripple{to{transform:scale(1);opacity:0}}
+
+/* Появление при прокрутке */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--i,0)*90ms)}
+.rv.blur{transform:scale(.96);filter:blur(12px);transition:opacity 1s var(--ease),transform 1s var(--ease),filter 1s var(--ease);transition-delay:calc(var(--i,0)*90ms)}
+.rv.in{opacity:1;transform:none;filter:none}
+
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+
+/* =========================================================
+   1. HERO
+   ========================================================= */
+.hero{min-height:100svh;display:flex;align-items:center;text-align:center;overflow:hidden;padding-top:120px!important}
+#neurons{position:absolute;inset:0;width:100%;height:100%}
+.sphere{position:absolute;left:50%;top:50%;width:min(64vmin,560px);aspect-ratio:1;margin:calc(min(64vmin,560px)/-2) 0 0 calc(min(64vmin,560px)/-2);border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,rgba(255,184,154,.55),rgba(185,167,255,.35) 45%,rgba(14,19,48,0) 70%);
+  animation:breathe 9s var(--ease-soft) infinite;pointer-events:none}
+.sphere::after{content:"";position:absolute;inset:18%;border-radius:50%;border:1px solid rgba(246,241,234,.18);animation:breathe 9s var(--ease-soft) infinite reverse}
+.hero .wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
+.hero h1{font-size:clamp(42px,8.4vw,120px);line-height:1.02;max-width:12ch;margin-bottom:28px}
+.hero h1 .word{display:inline-block;white-space:nowrap}
+.hero h1 .ch{display:inline-block;opacity:0;transform:translateY(.55em) rotate(6deg);animation:chIn .9s var(--ease) forwards}
+@keyframes chIn{to{opacity:1;transform:none}}
+.hero h1 em{font-style:normal;color:var(--peach)}
+/* цвет каждой буквы задаётся в JS: плавный переход от лавандового к розовому */
+.hero .lead{max-width:34ch;margin:0 auto 38px;color:#DADCEE}
+.hero .fade{opacity:0;transform:translateY(16px);animation:chIn 1s var(--ease) forwards}
+.scroll-hint{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:2;width:26px;height:42px;border:2px solid rgba(246,241,234,.4);border-radius:20px}
+.scroll-hint::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--milk);animation:wheel 2.4s var(--ease-soft) infinite}
+@keyframes wheel{0%{transform:translateY(0);opacity:1}80%{transform:translateY(14px);opacity:0}100%{opacity:0}}
+
+/* =========================================================
+   2. ЧЕК-ИН
+   ========================================================= */
+.checkin{overflow:hidden}
+.tint{position:absolute;inset:0;pointer-events:none;transition:opacity .2s linear}
+.tint.low{background:radial-gradient(70% 60% at 50% 55%,rgba(90,100,160,.55),transparent 70%)}
+.tint.high{background:radial-gradient(60% 55% at 40% 50%,rgba(255,184,154,.35),transparent 70%),radial-gradient(50% 50% at 70% 60%,rgba(159,227,200,.3),transparent 70%)}
+.checkin .wrap{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,90px);align-items:center}
+.face-card{padding:clamp(24px,4vw,44px);display:flex;flex-direction:column;align-items:center;gap:28px}
+.face{width:min(260px,64vw)}
+.mood-label{font-family:var(--f-head);font-size:clamp(22px,2.6vw,30px);font-weight:600;text-align:center;min-height:1.3em}
+.slider{width:100%}
+.slider input{width:100%;-webkit-appearance:none;appearance:none;height:44px;background:transparent}
+.slider input::-webkit-slider-runnable-track{height:10px;border-radius:10px;background:linear-gradient(90deg,#6E77B8,var(--lavender),var(--mint),var(--peach))}
+.slider input::-moz-range-track{height:10px;border-radius:10px;background:linear-gradient(90deg,#6E77B8,var(--lavender),var(--mint),var(--peach))}
+.slider input::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;margin-top:-11px;border-radius:50%;background:var(--milk);border:4px solid var(--night);box-shadow:0 0 0 6px rgba(246,241,234,.18);transition:transform .2s}
+.slider input::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:var(--milk);border:4px solid var(--night)}
+.slider input:active::-webkit-slider-thumb{transform:scale(1.15)}
+.slider .ends{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);font-weight:600}
+.answer{font-size:clamp(19px,1.8vw,23px);min-height:5.2em;transition:opacity .35s,transform .35s var(--ease)}
+.answer.swap{opacity:0;transform:translateY(8px)}
+
+/* =========================================================
+   МАРКИ
+   ========================================================= */
+.marquee{overflow:hidden;padding:28px 0;border-block:1px solid rgba(255,255,255,.1);color:#F6F1EA;position:relative}
+.marquee-track{display:flex;width:max-content;animation:marquee 46s linear infinite}
+.marquee span{font-family:var(--f-head);font-size:clamp(26px,4vw,48px);font-weight:500;white-space:nowrap;padding-right:.6em;opacity:.85}
+.marquee span b{font-weight:500;color:var(--lavender)}
+.marquee span:nth-child(3n) b{color:var(--peach)}
+.marquee span:nth-child(3n+1) b{color:var(--mint)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* =========================================================
+   3. ЧТО ТАКОЕ ПСИХИЧЕСКОЕ ЗДОРОВЬЕ — scrollytelling
+   ========================================================= */
+.story{height:200vh;padding:0!important}
+.story .sticky{position:sticky;top:0;height:100svh;display:flex;align-items:center}
+.story .phrase{font-family:var(--f-head);font-weight:600;font-size:clamp(26px,4.4vw,58px);line-height:1.18;letter-spacing:-.02em;max-width:20ch}
+.story .phrase span{color:rgba(246,241,234,.16);transition:color .6s var(--ease-soft);transition-delay:calc(var(--w,0)*60ms)}
+.story .phrase.lit span{color:var(--milk)}
+.story .phrase.lit span.hl{color:var(--peach)}
+.compare{margin-top:clamp(28px,5vh,52px);display:grid;gap:12px;max-width:640px}
+.compare .row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;padding:14px 22px;border-radius:var(--r-md);opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.compare .row.on{opacity:1;transform:none}
+.compare .row.head{padding-block:4px;background:none;border:0;box-shadow:none;backdrop-filter:none;font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+.compare .arrow{width:34px;height:2px;background:linear-gradient(90deg,var(--mint),var(--peach));border-radius:2px;position:relative}
+.compare .arrow::after{content:"";position:absolute;right:-1px;top:-4px;width:8px;height:8px;border-top:2px solid var(--peach);border-right:2px solid var(--peach);transform:rotate(45deg)}
+.compare .row strong{font-weight:700}
+.compare .row span:last-child{text-align:right}
+
+/* =========================================================
+   4. ГОРИЗОНТАЛЬНАЯ ЛЕНТА
+   ========================================================= */
+.topics{padding:0!important}
+.topics .pin{padding:clamp(96px,13vh,130px) 0 48px}
+.topics-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:clamp(20px,4vh,40px)}
+.topics-head h2{margin-bottom:0}
+.topics-head p{color:var(--muted)}
+.track{display:flex;gap:20px;padding:6px max(20px,calc((100vw - 1180px)/2)) 30px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.topic{flex:0 0 min(86vw,520px);scroll-snap-align:center;padding:clamp(22px,3vw,34px);display:flex;flex-direction:column;gap:16px;min-height:min(560px,74svh);transform-style:preserve-3d;transition:transform .5s var(--ease)}
+.topic.wide{flex-basis:min(90vw,620px)}
+.topic .num{font-family:var(--f-head);font-size:13px;letter-spacing:.14em;color:var(--accent);font-weight:600}
+.topic h3{font-size:clamp(24px,2.4vw,32px);margin:0}
+.topic .meta{font-weight:700;color:var(--peach)}
+.topic p{color:var(--muted);font-size:16px}
+.topic .art{flex:1 1 auto;min-height:120px;border-radius:var(--r-md);background:radial-gradient(120% 90% at 50% 0%,rgba(185,167,255,.16),rgba(255,255,255,.03));border:1px solid var(--line);display:grid;place-items:center;overflow:hidden;position:relative}
+.topic .art svg{width:100%;height:100%;max-height:210px}
+.topic p.tip{font-size:15px;line-height:1.5;color:var(--ink);max-width:none;padding:12px 16px;border-radius:var(--r-sm);background:rgba(159,227,200,.1);border:1px solid rgba(159,227,200,.28)}
+.topic p.tip b{color:var(--mint)}
+.swipe-hint{display:none;font-size:14px;color:var(--muted);font-weight:600}
+
+/* Горизонтальный режим (широкий экран, анимации разрешены) */
+.h-mode .topics .pin{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.h-mode .track{overflow:visible;scroll-snap-type:none;will-change:transform;flex:1 1 auto;min-height:0;padding-bottom:20px}
+.h-mode .topics .pin{justify-content:flex-start;padding:clamp(84px,11vh,120px) 0 12px}
+.h-mode .topic{min-height:0}
+.h-mode .topic .art{flex:1 1 0;min-height:56px}
+.h-mode .topic .art.talk{flex:none}
+@media (max-height:960px){
+  .h-mode .topics-head{margin-bottom:14px}
+  .h-mode .topics-head h2{font-size:clamp(26px,3.2vw,40px)}
+  .h-mode .topics-head .kicker{margin-bottom:10px}
+  .h-mode .topic{padding:20px 24px;gap:10px}
+  .h-mode .topic h3{font-size:clamp(20px,2vw,26px)}
+  .h-mode .topic p{font-size:14.5px;line-height:1.45}
+  .h-mode .topic p.tip{font-size:14px;padding:8px 12px}
+  .h-mode .battery{height:64px}
+  .h-mode .battery::after{top:16px;height:26px}
+  .h-mode .battery-zone{gap:10px}
+  .h-mode .chip{min-height:38px;padding:6px 12px;font-size:14px}
+  .h-mode .emo-grid .flip{height:96px}
+  .h-mode .bubble{padding:10px 14px;font-size:14px}
+}
+@media (max-height:780px){
+  .h-mode .bubbles{gap:8px;padding:10px}
+  .h-mode .situation{font-size:13px;padding:5px 12px}
+  .h-mode .bubble small{margin-bottom:2px}
+  .h-mode .battery{height:54px}
+  .h-mode .battery::after{top:12px;height:22px}
+  .h-mode .chips-col{gap:6px}
+}
+@media (max-width:899px){.swipe-hint{display:block}}
+
+/* Стакан */
+.glass-cup .water{transform-origin:50% 100%;transform-box:fill-box;transform:scaleY(.08);transition:transform .25s linear}
+.glass-cup .wave{animation:wave 3s linear infinite}
+@keyframes wave{to{transform:translateX(-60px)}}
+.hold-scale{display:flex;justify-content:space-between;gap:8px;font-size:14px;font-weight:700}
+.hold-scale span{flex:1;text-align:center;padding:8px 6px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--muted);transition:background .4s,color .4s}
+.hold-scale span.on{background:var(--peach);color:var(--night);border-color:transparent}
+
+/* Сигнализация */
+.alarm .ring{transform-origin:200px 52px;transform-box:view-box;animation:ringOut 3.2s var(--ease-soft) infinite;opacity:0}
+.alarm .ring:nth-of-type(2){animation-delay:1.06s}.alarm .ring:nth-of-type(3){animation-delay:2.13s}
+@keyframes ringOut{0%{transform:scale(.4);opacity:.7}100%{transform:scale(1.8);opacity:0}}
+.alarm .smoke{animation:smoke 4s var(--ease-soft) infinite;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes smoke{0%{transform:translateY(8px) scale(.8);opacity:0}40%{opacity:.7}100%{transform:translateY(-34px) scale(1.2);opacity:0}}
+
+/* Батарейка */
+.battery-zone{display:grid;gap:16px}
+.battery{position:relative;height:96px;border-radius:22px;border:3px solid var(--ink);padding:8px;transition:box-shadow .3s,transform .3s var(--ease)}
+.battery::after{content:"";position:absolute;right:-12px;top:30px;width:9px;height:30px;border-radius:0 6px 6px 0;background:var(--ink)}
+.battery.over{box-shadow:0 0 0 6px rgba(159,227,200,.35);transform:scale(1.02)}
+.battery .lvl{position:relative;height:100%;border-radius:14px;overflow:hidden}
+.battery .fill{position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(.5);transition:transform .8s var(--ease)}
+.battery .fill i{position:absolute;inset:0;border-radius:14px;transition:opacity .8s}
+.battery .fill .lo{background:linear-gradient(90deg,#F59E7E,var(--peach))}
+.battery .fill .hi{background:linear-gradient(90deg,#6FD3AE,var(--mint))}
+.battery .pct{position:absolute;inset:0;display:grid;place-items:center}
+.battery .pct b{font-family:var(--f-head);font-weight:700;font-size:22px;color:#F6F1EA;background:rgba(14,19,48,.72);padding:2px 14px;border-radius:999px}
+.battery-status{font-weight:700;min-height:1.5em}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips-col{display:flex;flex-direction:column;gap:8px}
+.chips-col small{font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.chip{touch-action:none;user-select:none;min-height:44px;padding:8px 14px;border-radius:999px;font-weight:700;font-size:15px;text-align:left;display:flex;align-items:center;gap:8px;border:1px solid var(--line);transition:box-shadow .2s,background .2s;position:relative;z-index:1}
+.chip::before{content:"";width:10px;height:10px;border-radius:50%;flex:none}
+.chip.drain{background:rgba(255,184,154,.14)}.chip.drain::before{background:var(--peach)}
+.chip.charge{background:rgba(159,227,200,.14)}.chip.charge::before{background:var(--mint)}
+.chip.dragging{z-index:20;box-shadow:0 14px 30px -10px rgba(0,0,0,.5);cursor:grabbing}
+.chip.back{transition:transform .45s var(--ease)}
+
+/* Мини-перевёртыши эмоций и мифы */
+.flip{perspective:1000px;text-align:left;width:100%;min-height:44px;display:block}
+.flip-in{display:block;position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .8s var(--ease)}
+.flip.is-flipped .flip-in{transform:rotateY(180deg)}
+@media (hover:hover) and (pointer:fine){.flip:hover .flip-in{transform:rotateY(180deg)}}
+.face-f,.face-b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--r-md);padding:16px;display:flex;flex-direction:column;justify-content:center;gap:6px;border:1px solid var(--line)}
+.face-b{transform:rotateY(180deg)}
+.emo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.emo-grid .flip{height:118px}
+.emo-grid .face-f{background:var(--card-hi);align-items:flex-start}
+.emo-grid .face-f b{font-family:var(--f-head);font-size:19px;font-weight:600}
+.emo-grid .face-f .dot{width:28px;height:28px;border-radius:50%}
+.emo-grid .face-b{background:rgba(185,167,255,.22);font-size:14px;line-height:1.4;color:var(--ink)}
+
+/* Критик и друг */
+.topic .art.talk{flex:none;overflow:visible;place-items:stretch}
+.bubbles{display:grid;gap:12px;align-content:center;width:100%;padding:16px}
+.situation{justify-self:center;font-size:14px;font-weight:700;padding:8px 16px;border-radius:999px;background:var(--card-hi);border:1px solid var(--line)}
+.bubble{position:relative;max-width:82%;padding:14px 18px;border-radius:22px;font-weight:600;line-height:1.4;font-size:15.5px}
+.bubble small{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;opacity:.8}
+.bubble.critic{background:rgba(110,119,184,.35);border-bottom-left-radius:6px}
+.bubble.friend{justify-self:end;background:rgba(159,227,200,.85);color:var(--night);border-bottom-right-radius:6px}
+
+/* Забор */
+.fence .gate{transform-origin:236px 0;transform-box:view-box;animation:gate 5s var(--ease-soft) infinite}
+@keyframes gate{0%,20%{transform:scaleX(1)}45%,70%{transform:scaleX(.25)}95%,100%{transform:scaleX(1)}}
+
+/* Сеть поддержки */
+.net line{stroke-dasharray:120;stroke-dashoffset:120;animation:draw 4s var(--ease-soft) infinite}
+.net line:nth-child(2n){animation-delay:.6s}.net line:nth-child(3n){animation-delay:1.2s}
+@keyframes draw{0%{stroke-dashoffset:120}40%,75%{stroke-dashoffset:0}100%{stroke-dashoffset:-120}}
+.net circle{animation:breathe 4s var(--ease-soft) infinite;transform-box:fill-box;transform-origin:center}
+
+/* Сон и тело */
+.team .link{stroke-dasharray:6 10;animation:dash 2.8s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-32}}
+.team .beat{transform-box:fill-box;transform-origin:center;animation:breathe 2.8s var(--ease-soft) infinite}
+
+/* =========================================================
+   5. МИФЫ
+   ========================================================= */
+.myth-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:40px}
+.tilt{transform-style:preserve-3d;transition:transform .5s var(--ease);will-change:transform}
+.myth .flip{height:clamp(230px,30vh,280px)}
+.myth .face-f{background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.08));padding:28px;border-radius:var(--r-lg)}
+.myth .face-b{background:linear-gradient(150deg,rgba(159,227,200,.95),rgba(246,241,234,.95));color:var(--night);padding:28px;border-radius:var(--r-lg);border:0}
+.myth .tag{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.myth .face-f .tag{color:var(--peach)}
+.myth .face-b .tag{color:#245E4B}
+.myth .face-f b{font-family:var(--f-head);font-size:clamp(20px,2.2vw,27px);font-weight:600;line-height:1.2}
+.myth .face-b p{font-size:16.5px;font-weight:500;color:var(--night)}
+.myth .hint{margin-top:auto;font-size:14px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:8px}
+.myth .hint::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent}
+
+/* =========================================================
+   6. ЦИФРЫ
+   ========================================================= */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px}
+.stat{padding:30px;display:flex;flex-direction:column;gap:10px}
+.stat .big{font-family:var(--f-head);font-weight:600;font-size:clamp(46px,6vw,78px);line-height:1;letter-spacing:-.03em}
+.stat .big small{font-size:.42em;margin-left:.15em;color:var(--accent)}
+.stat p{color:var(--muted);font-size:16px}
+.stat a{font-size:13px;color:var(--muted);text-underline-offset:3px;margin-top:auto}
+.stat a:hover{color:var(--ink)}
+.stats-note{margin-top:26px;color:var(--muted);font-size:17px}
+
+/* =========================================================
+   7. ПРАКТИКА
+   ========================================================= */
+#practice{background:linear-gradient(180deg,rgba(242,205,191,0) 0,#F2CDBF 200px,#F2CDBF 100vh,rgba(242,205,191,0) calc(100vh + 240px))}
+.practice-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px}
+.practice-card{padding:clamp(24px,3vw,38px);display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center}
+.practice-card h3{margin:0}
+.practice-card>p{color:var(--muted)}
+.breath-stage{position:relative;width:min(280px,70vw);aspect-ratio:1;display:grid;place-items:center}
+.breath-square{position:absolute;inset:0;border:2px dashed rgba(14,19,48,.22);border-radius:28px}
+.breath-dot{position:absolute;left:-9px;top:-9px;width:18px;height:18px;border-radius:50%;background:var(--lavender-deep);box-shadow:0 0 0 6px rgba(84,66,184,.18);will-change:transform}
+.breath-circle{width:78%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FFD9C7,var(--peach) 45%,var(--lavender) 100%);transform:scale(.55);transition:transform 4s var(--ease-soft);box-shadow:0 20px 60px -20px rgba(255,140,100,.6);display:grid;place-items:center;will-change:transform}
+.breath-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.breath-text b{font-family:var(--f-head);font-size:24px;font-weight:600}
+.breath-text span{font-family:var(--f-head);font-size:44px;font-weight:600;line-height:1}
+.row-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.rounds{font-size:14px;color:var(--muted);font-weight:600;min-height:1.5em}
+
+.ring-wrap{position:relative;width:150px;height:150px}
+.ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-wrap .track-c{stroke:rgba(14,19,48,.12)}
+.ring-wrap .prog{stroke:url(#ringGrad);stroke-linecap:round;stroke-dasharray:408;stroke-dashoffset:408;transition:stroke-dashoffset .8s var(--ease)}
+.ring-wrap .ring-num{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-head);font-size:52px;font-weight:600}
+.ground-step{min-height:150px;display:flex;flex-direction:column;align-items:center;gap:12px;transition:opacity .35s,transform .45s var(--ease)}
+.ground-step.out{opacity:0;transform:translateX(-30px)}
+.ground-step.pre{opacity:0;transform:translateX(30px);transition:none}
+.ground-step b{font-family:var(--f-head);font-size:clamp(19px,1.9vw,22px);font-weight:600;max-width:22ch}
+.ground-step .muted{font-size:15.5px}
+.marks{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.mark{width:44px;height:44px;border-radius:50%;border:2px solid rgba(14,19,48,.25);display:grid;place-items:center;transition:background .3s,border-color .3s,transform .3s var(--ease)}
+.mark svg{width:18px;height:18px;stroke:var(--night);stroke-width:3;fill:none;stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .4s var(--ease)}
+.mark[aria-pressed="true"]{background:var(--mint);border-color:var(--mint);transform:scale(1.06)}
+.mark[aria-pressed="true"] svg{stroke-dashoffset:0}
+
+/* =========================================================
+   8. КОГДА ОБРАТИТЬСЯ
+   ========================================================= */
+.help-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;margin-top:40px;align-items:start}
+.checklist{padding:clamp(22px,3vw,36px);display:grid;gap:6px}
+.check{display:flex;align-items:center;gap:16px;padding:12px 10px;border-radius:var(--r-sm);cursor:pointer;transition:background .25s;font-weight:600;font-size:17px}
+.check:hover{background:var(--card-hi)}
+.check input{position:absolute;opacity:0;width:1px;height:1px}
+.box{flex:none;width:30px;height:30px;border-radius:10px;border:2px solid rgba(14,19,48,.3);display:grid;place-items:center;transition:background .3s,border-color .3s,transform .3s var(--ease)}
+.box svg{width:18px;height:18px;fill:none;stroke:var(--night);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24;stroke-dashoffset:24;transition:stroke-dashoffset .45s var(--ease) .05s}
+.check input:checked+.box{background:var(--mint);border-color:var(--mint);transform:scale(1.08)}
+.check input:checked+.box svg{stroke-dashoffset:0}
+.check input:focus-visible+.box{outline:3px solid var(--lavender-deep);outline-offset:3px}
+.verdict{margin-top:14px;padding:20px 22px;border-radius:var(--r-md);background:rgba(159,227,200,.4);font-weight:600;font-size:17px;transition:transform .5s var(--ease),background .5s}
+.verdict.lit{background:rgba(159,227,200,.8);transform:scale(1.01)}
+.crisis{padding:clamp(24px,3vw,36px);display:flex;flex-direction:column;gap:16px;background:linear-gradient(160deg,rgba(255,255,255,.8),rgba(255,236,226,.7))}
+.crisis h3{margin:0}
+.call{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:var(--r-md);background:var(--night);color:var(--milk);text-decoration:none;min-height:64px;transition:transform .25s var(--ease)}
+.call:hover{transform:translateY(-2px)}
+.call b{font-family:var(--f-head);font-size:30px;font-weight:600}
+.call span{font-size:15px;opacity:.85}
+.hotlines{padding:16px 20px;border-radius:var(--r-md);border:2px dashed rgba(14,19,48,.22);font-size:15px;color:var(--muted)}
+
+/* =========================================================
+   9. ФИНАЛ
+   ========================================================= */
+.final{min-height:100svh;display:flex;align-items:center;text-align:center;overflow:hidden}
+.final .wrap{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center}
+.final h2{font-size:clamp(34px,min(6.4vw,10vh),92px);max-width:14ch;margin-bottom:24px}
+.final h2 span{background:linear-gradient(100deg,var(--lavender-deep),#E0784F);-webkit-background-clip:text;background-clip:text;color:transparent}
+.final .lead{margin:0 auto 36px;max-width:34ch}
+.affirm{position:absolute;inset:0;pointer-events:none}
+.affirm span{position:absolute;font-family:var(--f-head);font-weight:500;font-size:clamp(14px,1.4vw,18px);padding:10px 18px;border-radius:999px;background:rgba(255,255,255,.55);border:1px solid rgba(14,19,48,.08);color:var(--night);white-space:nowrap;animation:float 9s var(--ease-soft) infinite;box-shadow:0 10px 30px -14px rgba(120,70,50,.35)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+
+footer{padding:36px 0 44px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
+footer p{max-width:60ch}
+
+/* =========================================================
+   АДАПТИВ
+   ========================================================= */
+@media (max-width:899px){
+  .checkin .wrap,.help-grid,.practice-grid{grid-template-columns:1fr}
+  .myth-grid,.stats{grid-template-columns:1fr}
+  .topics-head{flex-direction:column;align-items:flex-start}
+  .affirm span:nth-child(n+5){display:none}
+  .affirm span:nth-child(n+3){display:none}
+  .final .wrap{padding-block:60px}
+}
+@media (max-width:480px){
+  body{font-size:16px}
+  .btn{width:100%}
+  .compare .row{padding:12px 16px;gap:10px;font-size:15px}
+  .compare .arrow{width:20px}
+  .chips{grid-template-columns:1fr}
+  .story .phrase{font-size:27px}
+}
+
+/* =========================================================
+   УМЕНЬШЕНИЕ ДВИЖЕНИЯ
+   ========================================================= */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.25s!important;transition-delay:0s!important}
+  .hero h1 .ch,.hero .fade{opacity:1;transform:none}
+  .rv,.rv.blur{transform:none;filter:none}
+  .marquee-track{animation:none;flex-wrap:wrap;width:auto}
+  .marquee-track span:nth-child(n+11){display:none}
+  .story{height:auto}
+  .story .sticky{position:static;height:auto;padding:120px 0}
+  .story .phrase span{color:var(--milk)}
+  .compare .row{opacity:1;transform:none}
+  .breath-circle{transition-duration:4s!important}
+  .breath-dot{transition-duration:4s!important}
+}
+</style>
+</head>
+
+<body data-theme="dark">
+<a class="skip" href="#main">Перейти к содержанию</a>
+
+<div class="sky" aria-hidden="true"></div>
+<div class="blobs" aria-hidden="true">
+  <div class="blob b1" data-depth=".12"><svg viewBox="0 0 500 500"><defs><radialGradient id="g1"><stop offset="0" stop-color="#B9A7FF"/><stop offset="1" stop-color="#B9A7FF" stop-opacity="0"/></radialGradient></defs>
+    <path fill="url(#g1)" d="M421,306Q397,362,345,393Q293,424,236,421Q179,418,128,384Q77,350,83,286Q89,222,117,165Q145,108,208,93Q271,78,328,104Q385,130,415,190Q445,250,421,306Z">
+      <animate attributeName="d" dur="20s" repeatCount="indefinite" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M421,306Q397,362,345,393Q293,424,236,421Q179,418,128,384Q77,350,83,286Q89,222,117,165Q145,108,208,93Q271,78,328,104Q385,130,415,190Q445,250,421,306Z;M440,310Q410,370,350,400Q290,430,230,410Q170,390,120,350Q70,310,90,250Q110,190,150,140Q190,90,250,90Q310,90,360,120Q410,150,440,200Q470,250,440,310Z;M400,320Q380,390,320,410Q260,430,200,400Q140,370,110,320Q80,270,100,210Q120,150,170,120Q220,90,280,100Q340,110,380,150Q420,190,420,250Q420,290,400,320Z;M421,306Q397,362,345,393Q293,424,236,421Q179,418,128,384Q77,350,83,286Q89,222,117,165Q145,108,208,93Q271,78,328,104Q385,130,415,190Q445,250,421,306Z"/></path></svg></div>
+  <div class="blob b2" data-depth=".22"><svg viewBox="0 0 500 500"><defs><radialGradient id="g2"><stop offset="0" stop-color="#FFB89A"/><stop offset="1" stop-color="#FFB89A" stop-opacity="0"/></radialGradient></defs>
+    <path fill="url(#g2)" d="M440,310Q410,370,350,400Q290,430,230,410Q170,390,120,350Q70,310,90,250Q110,190,150,140Q190,90,250,90Q310,90,360,120Q410,150,440,200Q470,250,440,310Z">
+      <animate attributeName="d" dur="24s" repeatCount="indefinite" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M440,310Q410,370,350,400Q290,430,230,410Q170,390,120,350Q70,310,90,250Q110,190,150,140Q190,90,250,90Q310,90,360,120Q410,150,440,200Q470,250,440,310Z;M400,320Q380,390,320,410Q260,430,200,400Q140,370,110,320Q80,270,100,210Q120,150,170,120Q220,90,280,100Q340,110,380,150Q420,190,420,250Q420,290,400,320Z;M421,306Q397,362,345,393Q293,424,236,421Q179,418,128,384Q77,350,83,286Q89,222,117,165Q145,108,208,93Q271,78,328,104Q385,130,415,190Q445,250,421,306Z;M440,310Q410,370,350,400Q290,430,230,410Q170,390,120,350Q70,310,90,250Q110,190,150,140Q190,90,250,90Q310,90,360,120Q410,150,440,200Q470,250,440,310Z"/></path></svg></div>
+  <div class="blob b3" data-depth=".34"><svg viewBox="0 0 500 500"><defs><radialGradient id="g3"><stop offset="0" stop-color="#9FE3C8"/><stop offset="1" stop-color="#9FE3C8" stop-opacity="0"/></radialGradient></defs>
+    <path fill="url(#g3)" d="M400,320Q380,390,320,410Q260,430,200,400Q140,370,110,320Q80,270,100,210Q120,150,170,120Q220,90,280,100Q340,110,380,150Q420,190,420,250Q420,290,400,320Z">
+      <animate attributeName="d" dur="28s" repeatCount="indefinite" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1" values="M400,320Q380,390,320,410Q260,430,200,400Q140,370,110,320Q80,270,100,210Q120,150,170,120Q220,90,280,100Q340,110,380,150Q420,190,420,250Q420,290,400,320Z;M421,306Q397,362,345,393Q293,424,236,421Q179,418,128,384Q77,350,83,286Q89,222,117,165Q145,108,208,93Q271,78,328,104Q385,130,415,190Q445,250,421,306Z;M440,310Q410,370,350,400Q290,430,230,410Q170,390,120,350Q70,310,90,250Q110,190,150,140Q190,90,250,90Q310,90,360,120Q410,150,440,200Q470,250,440,310Z;M400,320Q380,390,320,410Q260,430,200,400Q140,370,110,320Q80,270,100,210Q120,150,170,120Q220,90,280,100Q340,110,380,150Q420,190,420,250Q420,290,400,320Z"/></path></svg></div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"></div>
+<div class="cursor-cloud" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<header class="top" data-theme="dark">
+  <div class="wrap">
+    <nav class="nav" aria-label="Основная навигация">
+      <a class="logo" href="#top" aria-label="Как ты? — в начало"><i aria-hidden="true"></i>Как ты?</a>
+      <ul>
+        <li><a href="#topics">Темы</a></li>
+        <li><a href="#myths">Мифы</a></li>
+        <li><a href="#practice">Практика</a></li>
+        <li><a class="nav-help" href="#help">Нужна помощь</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- 1. HERO -->
+  <section class="hero" id="top" data-bg="#0E1330" data-theme="dark" aria-labelledby="hero-title">
+    <canvas id="neurons" aria-hidden="true"></canvas>
+    <div class="sphere" aria-hidden="true"></div>
+    <div class="wrap">
+      <h1 id="hero-title" class="split" aria-label="Как ты на самом деле?">Как ты <em>на самом</em> деле?</h1>
+      <p class="lead fade" style="animation-delay:1.3s">Психическое здоровье — это не про болезни. Это про то, как ты живёшь каждый день.</p>
+      <div class="fade" style="animation-delay:1.55s">
+        <a class="btn btn-main magnetic" href="#checkin"><span class="btn-in">Заглянуть внутрь
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></span></a>
+      </div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true"></div>
+  </section>
+
+  <!-- 2. ЧЕК-ИН -->
+  <section class="checkin screen" id="checkin" data-bg="#151B42" data-theme="dark" aria-labelledby="checkin-title">
+    <div class="tint low" aria-hidden="true"></div>
+    <div class="tint high" aria-hidden="true"></div>
+    <div class="wrap">
+      <div>
+        <div class="kicker rv">Чек-ин</div>
+        <h2 id="checkin-title" class="rv" style="--i:1">Как ты сегодня? Честно.</h2>
+        <p class="lead rv" style="--i:2">Здесь нет правильных ответов. Просто подвинь ползунок туда, где ты сейчас.</p>
+        <p class="answer rv" style="--i:3" id="mood-answer" aria-live="polite"></p>
+      </div>
+      <div class="face-card glass rv blur" style="--i:2">
+        <svg class="face" viewBox="0 0 200 200" role="img" aria-labelledby="face-t">
+          <title id="face-t">Лицо, которое меняет выражение вместе с настроением</title>
+          <circle id="face-bg" cx="100" cy="100" r="92" fill="#B9A7FF"/>
+          <circle id="cheek-l" cx="58" cy="122" r="12" fill="#FF9C7A" opacity="0"/>
+          <circle id="cheek-r" cx="142" cy="122" r="12" fill="#FF9C7A" opacity="0"/>
+          <g id="eyes" fill="#0E1330"><ellipse cx="72" cy="94" rx="8" ry="10"/><ellipse cx="128" cy="94" rx="8" ry="10"/></g>
+          <path id="brow-l" d="M58 72 L86 70" stroke="#0E1330" stroke-width="6" stroke-linecap="round"/>
+          <path id="brow-r" d="M114 70 L142 72" stroke="#0E1330" stroke-width="6" stroke-linecap="round"/>
+          <path id="mouth" d="M70 136 Q100 136 130 136" stroke="#0E1330" stroke-width="7" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div class="mood-label" id="mood-label">Ровно</div>
+        <div class="slider">
+          <label class="sr" for="mood">Настроение от «на дне» до «отлично»</label>
+          <input id="mood" type="range" min="0" max="100" value="50" aria-valuetext="Ровно">
+          <div class="ends" aria-hidden="true"><span>на дне</span><span>отлично</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marquee"></div>
+  </div>
+
+  <!-- 3. ЧТО ТАКОЕ ПСИХИЧЕСКОЕ ЗДОРОВЬЕ -->
+  <section class="story" id="story" data-bg="#1B2150" data-theme="dark" aria-labelledby="story-title">
+    <div class="sticky">
+      <div class="wrap">
+        <div class="kicker" id="story-title">Что такое психическое здоровье</div>
+        <p class="phrase" id="phrase">Мы чистим зубы каждый день, а за головой ухаживаем, только когда «сломалось».</p>
+        <div class="compare" role="table" aria-label="Тело и психика: похожие ситуации">
+          <div class="row head" role="row"><span role="columnheader">Тело</span><span></span><span role="columnheader">Психика</span></div>
+          <div class="row glass" role="row"><strong role="cell">Простуда</strong><span class="arrow" aria-hidden="true"></span><span role="cell">Тревога</span></div>
+          <div class="row glass" role="row"><strong role="cell">Перелом</strong><span class="arrow" aria-hidden="true"></span><span role="cell">Выгорание</span></div>
+          <div class="row glass" role="row"><strong role="cell">Зарядка</strong><span class="arrow" aria-hidden="true"></span><span role="cell">Забота о себе</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. ГОРИЗОНТАЛЬНАЯ ЛЕНТА ТЕМ -->
+  <section class="topics" id="topics" data-bg="#272B5E" data-theme="dark" aria-labelledby="topics-title">
+    <div class="pin">
+      <div class="wrap topics-head">
+        <div>
+          <div class="kicker">Внутренняя погода</div>
+          <h2 id="topics-title">Восемь тем простыми словами</h2>
+        </div>
+        <p class="swipe-hint">Листай карточки вбок →</p>
+      </div>
+      <div class="track" id="track">
+
+        <!-- Стресс -->
+        <article class="topic glass tilt">
+          <span class="num">01 · Стресс</span>
+          <h3>Стакан воды</h3>
+          <div class="art glass-cup" aria-hidden="true">
+            <svg viewBox="0 0 240 200">
+              <defs><clipPath id="cupClip"><path d="M80 30 L160 30 L150 175 Q120 183 90 175 Z"/></clipPath>
+                <linearGradient id="waterG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9FE3C8"/><stop offset="1" stop-color="#6E9BE0"/></linearGradient></defs>
+              <g clip-path="url(#cupClip)">
+                <rect class="water" id="water" x="70" y="30" width="100" height="155" fill="url(#waterG)" opacity=".85"/>
+              </g>
+              <path d="M80 30 L160 30 L150 175 Q120 183 90 175 Z" fill="rgba(255,255,255,.08)" stroke="#F6F1EA" stroke-width="3" stroke-linejoin="round"/>
+              <path d="M92 44 L88 150" stroke="rgba(255,255,255,.35)" stroke-width="4" stroke-linecap="round"/>
+              <path d="M40 120 Q60 118 74 110" stroke="#FFB89A" stroke-width="10" stroke-linecap="round" fill="none"/>
+              <path d="M200 120 Q180 118 166 110" stroke="#FFB89A" stroke-width="10" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <div class="hold-scale" id="hold-scale" aria-hidden="true"><span>минута</span><span>час</span><span>весь день</span></div>
+          <p>Стресс — это нагрузка, как стакан воды в вытянутой руке. Минуту держать легко, час — тяжело, весь день — невозможно. Дело не в весе, а во времени.</p>
+          <p class="tip"><b>Попробуй:</b> иногда «ставь стакан» — 5 минут пройтись, выпить чай без телефона, сделать пару медленных вдохов.</p>
+        </article>
+
+        <!-- Тревога -->
+        <article class="topic glass tilt">
+          <span class="num">02 · Тревога</span>
+          <h3>Чуткая сигнализация</h3>
+          <div class="art alarm" aria-hidden="true">
+            <svg viewBox="0 0 400 220">
+              <rect x="0" y="0" width="400" height="22" fill="rgba(255,255,255,.06)"/>
+              <circle class="ring" cx="200" cy="52" r="34" fill="none" stroke="#FFB89A" stroke-width="2"/>
+              <circle class="ring" cx="200" cy="52" r="34" fill="none" stroke="#FFB89A" stroke-width="2"/>
+              <circle class="ring" cx="200" cy="52" r="34" fill="none" stroke="#FFB89A" stroke-width="2"/>
+              <rect x="168" y="22" width="64" height="14" rx="4" fill="#F6F1EA"/>
+              <ellipse cx="200" cy="40" rx="30" ry="12" fill="#F6F1EA"/>
+              <circle cx="200" cy="40" r="4" fill="#9FE3C8"/>
+              <rect x="140" y="140" width="120" height="66" rx="20" fill="#B9A7FF"/>
+              <rect x="160" y="130" width="28" height="22" rx="6" fill="#E7B98A"/>
+              <rect x="212" y="130" width="28" height="22" rx="6" fill="#D19A66"/>
+              <circle cx="174" cy="176" r="5" fill="#0E1330"/>
+              <rect x="226" y="170" width="20" height="8" rx="4" fill="#0E1330" opacity=".5"/>
+              <path class="smoke" d="M226 120 q-8 -10 0 -20 q8 -10 0 -20" stroke="rgba(246,241,234,.6)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="meta">Срабатывает на подгоревший тост</p>
+          <p>Тревога — внутренняя сигнализация: она хочет тебя защитить. Но иногда срабатывает там, где опасности нет, — перед звонком, экзаменом или трудным разговором.</p>
+          <p class="tip"><b>Попробуй:</b> спроси себя «Что, скорее всего, случится на самом деле?» и сделай выдох длиннее вдоха.</p>
+        </article>
+
+        <!-- Выгорание -->
+        <article class="topic glass wide tilt-off">
+          <span class="num">03 · Выгорание</span>
+          <h3>Батарейка</h3>
+          <p>Выгорание — когда долго тратишь силы и почти не восстанавливаешься: сначала усталость, потом раздражение, потом «ничего не хочется». Перетащи пункт в батарейку или нажми на него.</p>
+          <div class="battery-zone">
+            <div class="battery" id="battery" role="meter" aria-label="Заряд батарейки" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+              <div class="lvl"><div class="fill" id="fill"><i class="lo" id="fill-lo"></i><i class="hi" id="fill-hi"></i></div><div class="pct"><b id="pct">50%</b></div></div>
+            </div>
+            <p class="battery-status" id="battery-status" aria-live="polite">Держится. Посмотрим, что дальше.</p>
+            <div class="chips">
+              <div class="chips-col"><small>Тратит</small>
+                <button class="chip drain" data-delta="-15" data-name="Работа без перерывов">Работа без перерывов</button>
+                <button class="chip drain" data-delta="-12" data-name="Соцсети до ночи">Соцсети до ночи</button>
+                <button class="chip drain" data-delta="-15" data-name="Недосып">Недосып</button>
+              </div>
+              <div class="chips-col"><small>Заряжает</small>
+                <button class="chip charge" data-delta="15" data-name="Сон">Сон</button>
+                <button class="chip charge" data-delta="12" data-name="Прогулка">Прогулка</button>
+                <button class="chip charge" data-delta="15" data-name="Встреча с друзьями">Встреча с друзьями</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Эмоции -->
+        <article class="topic glass wide">
+          <span class="num">04 · Эмоции</span>
+          <h3>Лампочки на панели</h3>
+          <p>Эмоции — не враги, а сигналы, как лампочки на приборной панели машины. Лампочку не разбивают — смотрят, о чём она говорит. Чувства тоже не нужно прятать: их полезно понять. Наведи или нажми на карточку, чтобы перевернуть.</p>
+          <div class="emo-grid">
+            <button class="flip" aria-pressed="false"><span class="flip-in">
+              <span class="face-f"><span class="dot" style="background:#B9A7FF"></span><b>Страх</b></span>
+              <span class="face-b">Осторожно, тут может быть опасно. Притормози и оглядись.</span></span></button>
+            <button class="flip" aria-pressed="false"><span class="flip-in">
+              <span class="face-f"><span class="dot" style="background:#FFB89A"></span><b>Злость</b></span>
+              <span class="face-b">Кажется, нарушили твою границу или поступили несправедливо.</span></span></button>
+            <button class="flip" aria-pressed="false"><span class="flip-in">
+              <span class="face-f"><span class="dot" style="background:#7F9BD6"></span><b>Грусть</b></span>
+              <span class="face-b">Что-то важное ушло. Сейчас нужно время и бережность.</span></span></button>
+            <button class="flip" aria-pressed="false"><span class="flip-in">
+              <span class="face-f"><span class="dot" style="background:#9FE3C8"></span><b>Радость</b></span>
+              <span class="face-b">Вот это тебе подходит. Запомни и повтори.</span></span></button>
+          </div>
+        </article>
+
+        <!-- Самооценка -->
+        <article class="topic glass tilt">
+          <span class="num">05 · Самооценка</span>
+          <h3>Критик и друг</h3>
+          <div class="art talk">
+            <div class="bubbles">
+              <span class="situation">Ситуация: ошибка в отчёте</span>
+              <div class="bubble critic"><small>Внутренний критик</small>Ну конечно. Опять всё испорчено.</div>
+              <div class="bubble friend"><small>Внутренний друг</small>Бывает. Что поправим в следующий раз?</div>
+            </div>
+          </div>
+          <p>Самооценка — это то, как ты с собой разговариваешь. Внутри у каждого два голоса: критик ругает, друг поддерживает. Ситуация одна, а ощущается по-разному.</p>
+          <p class="tip"><b>Попробуй:</b> когда ошибаешься, подумай, что сказал(а) бы близкому человеку в такой ситуации, — и скажи это себе.</p>
+        </article>
+
+        <!-- Границы -->
+        <article class="topic glass tilt">
+          <span class="num">06 · Личные границы</span>
+          <h3>Забор с калиткой</h3>
+          <div class="art fence" aria-hidden="true">
+            <svg viewBox="0 0 400 200">
+              <path d="M0 170 H400" stroke="rgba(246,241,234,.3)" stroke-width="2"/>
+              <g fill="#B9A7FF">
+                <path d="M30 170 V80 l14 -16 l14 16 V170Z"/><path d="M80 170 V80 l14 -16 l14 16 V170Z"/><path d="M130 170 V80 l14 -16 l14 16 V170Z"/><path d="M180 170 V80 l14 -16 l14 16 V170Z"/>
+                <path d="M300 170 V80 l14 -16 l14 16 V170Z"/><path d="M350 170 V80 l14 -16 l14 16 V170Z"/>
+                <rect x="20" y="104" width="196" height="10" rx="4"/><rect x="290" y="104" width="100" height="10" rx="4"/>
+              </g>
+              <g class="gate" fill="#FFB89A">
+                <rect x="236" y="76" width="44" height="94" rx="6"/>
+                <rect x="244" y="90" width="28" height="66" rx="4" fill="#0E1330" opacity=".25"/>
+                <circle cx="272" cy="126" r="4" fill="#0E1330"/>
+              </g>
+              <circle cx="226" cy="76" r="6" fill="#9FE3C8"/>
+            </svg>
+          </div>
+          <p>Личные границы — это твои правила: что тебе подходит, а что нет. Граница — не стена от людей, а калитка: ты решаешь, кого и когда впускать.</p>
+          <p class="tip"><b>Попробуй:</b> «Мне сейчас неудобно, давай в другой раз». Сказать «нет» — нормально, плохим человеком это тебя не делает.</p>
+        </article>
+
+        <!-- Сон и тело -->
+        <article class="topic glass tilt">
+          <span class="num">07 · Сон и тело</span>
+          <h3>Одна команда</h3>
+          <div class="art team" aria-hidden="true">
+            <svg viewBox="0 0 400 200">
+              <path class="link" d="M120 100 C170 50 230 150 280 100" stroke="#9FE3C8" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <circle cx="100" cy="100" r="44" fill="rgba(185,167,255,.25)"/>
+              <path d="M110 76 a28 28 0 1 0 14 44 a22 22 0 1 1 -14 -44z" fill="#B9A7FF"/>
+              <circle cx="300" cy="100" r="44" fill="rgba(255,184,154,.22)"/>
+              <path class="beat" d="M300 122 C270 102 280 78 300 90 C320 78 330 102 300 122Z" fill="#FFB89A"/>
+            </svg>
+          </div>
+          <p>Психика и тело — одна команда. После бессонной ночи мир кажется мрачнее, а после прогулки и обеда — устойчивее. Иногда «плохое настроение» — это просто усталость или голод.</p>
+          <p class="tip"><b>Попробуй:</b> в тяжёлый момент сначала проверь базу: спал(а)? ел(а)? был(а) на воздухе?</p>
+        </article>
+
+        <!-- Отношения -->
+        <article class="topic glass tilt">
+          <span class="num">08 · Отношения и поддержка</span>
+          <h3>Никто не обязан справляться один</h3>
+          <div class="art net" aria-hidden="true">
+            <svg viewBox="0 0 400 200">
+              <g stroke="#9FE3C8" stroke-width="2" stroke-linecap="round">
+                <line x1="200" y1="100" x2="100" y2="50"/><line x1="200" y1="100" x2="300" y2="50"/><line x1="200" y1="100" x2="90" y2="150"/>
+                <line x1="200" y1="100" x2="310" y2="150"/><line x1="100" y1="50" x2="90" y2="150"/><line x1="300" y1="50" x2="310" y2="150"/>
+              </g>
+              <circle cx="200" cy="100" r="18" fill="#FFB89A"/>
+              <circle cx="100" cy="50" r="12" fill="#B9A7FF"/><circle cx="300" cy="50" r="12" fill="#B9A7FF"/>
+              <circle cx="90" cy="150" r="12" fill="#9FE3C8"/><circle cx="310" cy="150" r="12" fill="#9FE3C8"/>
+            </svg>
+          </div>
+          <p>Вместе справляться легче — так мы устроены. Попросить о помощи — не слабость, а умение. Поддержка — это не обязательно советы: иногда достаточно, чтобы тебя просто выслушали.</p>
+          <p class="tip"><b>Попробуй:</b> напиши близкому: «Мне сейчас непросто. Можем поговорить?»</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. МИФЫ -->
+  <section id="myths" data-bg="#3A3772" data-theme="dark" aria-labelledby="myths-title">
+    <div class="wrap">
+      <div class="kicker rv">Мифы и правда</div>
+      <h2 id="myths-title" class="rv" style="--i:1">Что мы слышали — и как на самом деле</h2>
+      <p class="lead rv" style="--i:2">Наведи курсор или нажми на карточку, чтобы перевернуть.</p>
+      <div class="myth-grid">
+        <div class="myth rv" style="--i:0"><button class="flip" aria-pressed="false"><span class="flip-in">
+          <span class="face-f"><span class="tag">Миф</span><b>«К психологу ходят только психи»</b><span class="hint">Перевернуть</span></span>
+          <span class="face-b"><span class="tag">Правда</span><p>К психологу приходят с обычными вещами: усталость, ссоры, переезд, сложный выбор. Как к тренеру — не только когда всё плохо.</p></span></span></button></div>
+        <div class="myth rv" style="--i:1"><button class="flip" aria-pressed="false"><span class="flip-in">
+          <span class="face-f"><span class="tag">Миф</span><b>«Надо просто взять себя в руки»</b><span class="hint">Перевернуть</span></span>
+          <span class="face-b"><span class="tag">Правда</span><p>Если бы это работало, так делали бы все. Силы — как батарейка: пустую нужно зарядить, а не ругать.</p></span></span></button></div>
+        <div class="myth rv" style="--i:2"><button class="flip" aria-pressed="false"><span class="flip-in">
+          <span class="face-f"><span class="tag">Миф</span><b>«Говорить о чувствах — слабость»</b><span class="hint">Перевернуть</span></span>
+          <span class="face-b"><span class="tag">Правда</span><p>Назвать чувство словами — это навык. Часто уже после этого становится легче и понятнее, что делать.</p></span></span></button></div>
+        <div class="myth rv" style="--i:3"><button class="flip" aria-pressed="false"><span class="flip-in">
+          <span class="face-f"><span class="tag">Миф</span><b>«Само пройдёт»</b><span class="hint">Перевернуть</span></span>
+          <span class="face-b"><span class="tag">Правда</span><p>Иногда проходит. Но порез тоже лучше обработать, чем ждать. С головой так же: чем раньше заметить, тем проще.</p></span></span></button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. ЦИФРЫ (данные ВОЗ) -->
+  <section id="numbers" class="screen" data-bg="#4E4380" data-theme="dark" aria-labelledby="numbers-title">
+    <div class="wrap">
+      <div class="kicker rv">Цифры ВОЗ</div>
+      <h2 id="numbers-title" class="rv" style="--i:1">С этим сталкиваются очень многие</h2>
+      <div class="stats">
+        <article class="stat glass rv blur" style="--i:0">
+          <div class="big"><span class="count" data-to="970">0</span><small>млн</small></div>
+          <p>человек в мире жили с психическим расстройством в 2019 году. Это примерно каждый восьмой.</p>
+          <a href="https://www.who.int/news-room/fact-sheets/detail/mental-disorders" target="_blank" rel="noopener">Источник: ВОЗ, «Mental disorders», 2022</a>
+        </article>
+        <article class="stat glass rv blur" style="--i:1">
+          <div class="big"><span class="count" data-to="25">0</span><small>%</small></div>
+          <p>на столько выросла распространённость тревоги и депрессии в мире за первый год пандемии COVID-19.</p>
+          <a href="https://www.who.int/news/item/02-03-2022-covid-19-pandemic-triggers-25-increase-in-prevalence-of-anxiety-and-depression-worldwide" target="_blank" rel="noopener">Источник: ВОЗ, новость от 2 марта 2022</a>
+        </article>
+        <article class="stat glass rv blur" style="--i:2">
+          <div class="big"><span class="count" data-to="12">0</span><small>млрд</small></div>
+          <p>рабочих дней в год теряется в мире из-за депрессии и тревоги.</p>
+          <a href="https://www.who.int/news-room/fact-sheets/detail/mental-health-at-work" target="_blank" rel="noopener">Источник: ВОЗ, «Mental health at work», 2024</a>
+        </article>
+      </div>
+      <p class="stats-note rv" style="--i:3">Если тебе бывает непросто — это нормально. Так бывает у многих, и справляться с этим в одиночку не обязательно.</p>
+    </div>
+  </section>
+
+  <!-- 7. ПРАКТИКА -->
+  <section id="practice" data-bg="#F2CDBF" data-theme="light" data-switch="top" aria-labelledby="practice-title">
+    <div class="wrap">
+      <div class="kicker rv">Попробуй прямо сейчас</div>
+      <h2 id="practice-title" class="rv" style="--i:1">Две минуты для себя</h2>
+      <p class="lead rv" style="--i:2">Это не лечение, а простые способы немного замедлиться. Они подходят почти всем.</p>
+      <div class="practice-grid">
+        <article class="practice-card glass rv" style="--i:0" aria-labelledby="breath-title">
+          <h3 id="breath-title">Дыхание «квадрат»</h3>
+          <p>Вдох на 4 счёта, пауза на 4, выдох на 4 и снова пауза. Следи за кругом.</p>
+          <div class="breath-stage">
+            <div class="breath-square" id="bsq"><span class="breath-dot" id="bdot"></span></div>
+            <div class="breath-circle" id="bcircle"></div>
+            <div class="breath-text" aria-live="polite"><b id="bphase">Начнём?</b><span id="bcount" aria-hidden="true"></span></div>
+          </div>
+          <div class="row-btns">
+            <button class="btn btn-main magnetic" id="bstart"><span class="btn-in">Старт</span></button>
+            <button class="btn btn-soft magnetic" id="bstop" disabled><span class="btn-in">Стоп</span></button>
+          </div>
+          <div class="rounds" id="brounds"></div>
+        </article>
+
+        <article class="practice-card glass rv" style="--i:1" aria-labelledby="ground-title">
+          <h3 id="ground-title">Заземление 5-4-3-2-1</h3>
+          <p>Помогает вернуться «сюда и сейчас», когда мысли разбегаются.</p>
+          <div class="ring-wrap" aria-hidden="true">
+            <svg viewBox="0 0 150 150"><defs><linearGradient id="ringGrad" x1="0" x2="1"><stop offset="0" stop-color="#5442B8"/><stop offset="1" stop-color="#E0784F"/></linearGradient></defs>
+              <circle class="track-c" cx="75" cy="75" r="65" fill="none" stroke-width="10"/>
+              <circle class="prog" id="gprog" cx="75" cy="75" r="65" fill="none" stroke-width="10"/></svg>
+            <div class="ring-num" id="gnum">5</div>
+          </div>
+          <div class="ground-step" id="gstep" aria-live="polite"></div>
+          <div class="row-btns">
+            <button class="btn btn-soft magnetic" id="gback"><span class="btn-in">Назад</span></button>
+            <button class="btn btn-main magnetic" id="gnext"><span class="btn-in">Дальше</span></button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. КОГДА ОБРАТИТЬСЯ -->
+  <section id="help" data-bg="#F8E2D5" data-theme="light" aria-labelledby="help-title">
+    <div class="wrap">
+      <div class="kicker rv">Когда стоит поговорить со специалистом</div>
+      <h2 id="help-title" class="rv" style="--i:1">Сигналы, на которые стоит обратить внимание</h2>
+      <p class="lead rv" style="--i:2">Отметь то, что узнаёшь в себе за последние пару недель. Это не тест и не диагноз — просто повод прислушаться.</p>
+      <div class="help-grid">
+        <div class="checklist glass rv" style="--i:0">
+          <label class="check"><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Долго нет сил, даже после отдыха</label>
+          <label class="check"><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Не радует то, что раньше радовало</label>
+          <label class="check"><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Сбились сон или аппетит</label>
+          <label class="check"><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Трудно справляться с обычными делами</label>
+          <label class="check"><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Тревога мешает жить привычной жизнью</label>
+          <label class="check"><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Хочется ни с кем не говорить, закрыться</label>
+          <p class="verdict" id="verdict" aria-live="polite">Это не приговор, а повод поговорить со специалистом — так же, как с врачом при боли.</p>
+        </div>
+
+        <aside class="crisis glass rv" style="--i:1" aria-labelledby="crisis-title">
+          <h3 id="crisis-title">Если прямо сейчас очень тяжело</h3>
+          <p>Если есть мысли навредить себе — позвони по номеру 112. Ты никому не помешаешь. Звонить — правильно.</p>
+          <a class="call" href="tel:112" aria-label="Позвонить по номеру 112"><b>112</b><span>Единый номер экстренных служб</span></a>
+          <!-- ВАЖНО: сюда добавить актуальные телефоны доверия для вашей страны.
+               Номера нужно проверить по официальным источникам перед публикацией. Не выдумывать. -->
+          <div class="hotlines">Здесь появятся проверенные телефоны доверия.</div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. ФИНАЛ -->
+  <section class="final" id="final" data-bg="#F6F1EA" data-theme="light" aria-labelledby="final-title">
+    <div class="affirm" aria-hidden="true">
+      <span style="left:4%;top:12%;animation-delay:0s">Отдых — тоже дело</span>
+      <span style="right:4%;top:20%;animation-delay:-2s">Чувства — это нормально</span>
+      <span style="left:10%;bottom:16%;animation-delay:-4s">Маленький шаг — тоже шаг</span>
+      <span style="right:9%;bottom:20%;animation-delay:-6s">Можно просить о помощи</span>
+      <span style="left:40%;top:5%;animation-delay:-3s">Сегодня — достаточно</span>
+      <span style="left:42%;bottom:6%;animation-delay:-5s">Можно не спешить</span>
+    </div>
+    <div class="wrap">
+      <h2 id="final-title" class="rv blur">Заботиться о себе — это не эгоизм. <span>Это база.</span></h2>
+      <p class="lead rv" style="--i:1">Начни с малого: выспись, выйди на воздух, напиши тому, кто тебе дорог.</p>
+      <button class="btn btn-main magnetic rv" style="--i:2" id="to-top"><span class="btn-in">Вернуться к началу
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" style="transform:rotate(180deg)"><path d="M12 5v14M6 13l6 6 6-6"/></svg></span></button>
+    </div>
+  </section>
+</main>
+
+<footer data-theme="light" style="background:#F6F1EA">
+  <div class="wrap">
+    <p>«Как ты?» — просветительский проект. Сайт не ставит диагнозов и не заменяет консультацию специалиста.</p>
+    <p>Цифры — по данным Всемирной организации здравоохранения (ВОЗ).</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* ---------- Split-text в заголовке ---------- */
+  (function split() {
+    const h = $('.split'); let i = 0;
+    const walk = node => {
+      [...node.childNodes].forEach(n => {
+        if (n.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(part => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+            const w = document.createElement('span'); w.className = 'word'; w.setAttribute('aria-hidden', 'true');
+            [...part].forEach(c => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; s.style.animationDelay = (0.25 + i++ * 0.045) + 's'; w.appendChild(s); });
+            frag.appendChild(w);
+          });
+          n.replaceWith(frag);
+        } else walk(n);
+      });
+    };
+    walk(h);
+    const em = $$('em .ch', h), from = [185, 167, 255], to = [255, 150, 170];
+    em.forEach((c, k) => { const t = em.length > 1 ? k / (em.length - 1) : 0; c.style.color = `rgb(${from.map((v, j) => Math.round(lerp(v, to[j], t))).join(',')})`; });
+  })();
+
+  /* ---------- Бегущая строка ---------- */
+  (function marquee() {
+    const words = ['тревога', 'стресс', 'радость', 'усталость', 'спокойствие', 'злость', 'грусть', 'надежда', 'интерес', 'нежность'];
+    const html = words.map(w => `<span>${w} <b>·</b></span>`).join('');
+    $('#marquee').innerHTML = html + html;
+  })();
+
+  /* ---------- Слои неба по секциям ---------- */
+  const sections = $$('main > section');
+  const sky = $('.sky');
+  const layers = sections.map(s => { const d = document.createElement('div'); d.style.background = s.dataset.bg; sky.appendChild(d); return d; });
+  const header = $('header.top');
+  let tops = [];
+  const measure = () => { tops = sections.map(s => s.getBoundingClientRect().top + scrollY); };
+
+  /* ---------- Плавный скролл (Lenis, если загрузился) ---------- */
+  let lenis = null;
+  function initLenis() {
+    if (reduce || !fine || !window.Lenis) return;
+    lenis = new Lenis({ lerp: 0.18, smoothWheel: true });
+    const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  }
+  const scrollToY = y => lenis ? lenis.scrollTo(y, { duration: 1.6 }) : scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]'); if (!a) return;
+    const t = document.querySelector(a.getAttribute('href')); if (!t) return;
+    e.preventDefault(); scrollToY(t.getBoundingClientRect().top + scrollY);
+    t.setAttribute('tabindex', '-1'); t.focus({ preventScroll: true });
+  });
+
+  /* ---------- Горизонтальная лента ---------- */
+  const topics = $('#topics'), track = $('#track');
+  let hMode = false;
+  function setupH() {
+    hMode = !reduce && innerWidth >= 900;
+    document.documentElement.classList.toggle('h-mode', hMode);
+    if (hMode) {
+      track.style.transform = '';
+      const dist = track.scrollWidth - innerWidth;
+      topics.style.height = (innerHeight + Math.max(0, dist)) + 'px';
+    } else { topics.style.height = ''; track.style.transform = ''; }
+  }
+
+  /* ---------- Главный цикл прокрутки ---------- */
+  const progress = $('.progress');
+  const blobs = $$('.blob');
+  const story = $('#story'), phraseEl = $('#phrase');
+  const accent = new Set(['каждый', 'головой', '«сломалось».']);
+  phraseEl.innerHTML = phraseEl.textContent.trim().split(/\s+/).map(w => `<span${accent.has(w) ? ' class="hl"' : ''}>${w}</span>`).join(' ');
+  const words = [...phraseEl.children];
+  words.forEach((w, k) => w.style.setProperty('--w', k));
+  const pio = new IntersectionObserver(([e]) => { if (e.isIntersecting) { phraseEl.classList.add('lit'); pio.disconnect(); } }, { threshold: 0.6 });
+  pio.observe(phraseEl);
+  const rows = $$('.compare .row');
+  const water = $('#water'), holdSpans = $$('#hold-scale span');
+
+  function sectionProgress(el) {
+    const r = el.getBoundingClientRect(); const total = r.height - innerHeight;
+    return total > 0 ? clamp(-r.top / total) : clamp((innerHeight - r.top) / (innerHeight + r.height));
+  }
+
+  let ticking = false;
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  function update() {
+    ticking = false;
+    const y = scrollY, vh = innerHeight;
+    const max = document.documentElement.scrollHeight - vh;
+    progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+
+    // небо: перетекание цвета на стыке секций
+    const center = y + vh / 2;
+    let i = 0; for (let k = 0; k < tops.length; k++) if (tops[k] <= center) i = k;
+    layers.forEach((l, k) => {
+      let o = k === 0 ? 1 : sections[k].dataset.switch === 'top' ? clamp((y - tops[k]) / 200) : clamp((center - (tops[k] - vh * 0.6)) / (vh * 0.6));
+      o = Math.round(o * 100) / 100;
+      if (l._o !== o) { l._o = o; l.style.opacity = o; }
+    });
+    // тема шапки — по секции под ней
+    let hi = 0; for (let k = 0; k < tops.length; k++) if (tops[k] + (sections[k].dataset.switch === 'top' ? 150 : 0) <= y + 60) hi = k;
+    const th = sections[hi].dataset.theme; if (header.dataset.theme !== th) header.dataset.theme = th;
+
+    // параллакс блобов
+    if (!reduce) blobs.forEach(b => { b.style.transform = `translate3d(0, ${-y * parseFloat(b.dataset.depth)}px, 0)`; });
+
+    // scrollytelling
+    if (!reduce) {
+      const p = sectionProgress(story);
+      rows.forEach((r, k) => r.classList.toggle('on', p > 0.2 + k * 0.12));
+    }
+
+    // горизонтальная лента + стакан
+    let fill;
+    if (hMode) {
+      const p = sectionProgress(topics);
+      track.style.transform = `translate3d(${-p * (track.scrollWidth - innerWidth)}px,0,0)`;
+      fill = clamp(p / 0.14);
+    } else {
+      const r = topics.getBoundingClientRect();
+      fill = clamp((vh - r.top) / (vh * 1.2));
+    }
+    water.style.transform = `scaleY(${0.08 + fill * 0.88})`;
+    const level = fill < 0.34 ? 0 : fill < 0.75 ? 1 : 2;
+    holdSpans.forEach((s, k) => s.classList.toggle('on', k === level));
+  }
+  if (reduce) { phraseEl.classList.add('lit'); rows.forEach(r => r.classList.add('on')); }
+
+  /* ---------- Появление при прокрутке ---------- */
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+  $$('.rv').forEach(el => io.observe(el));
+
+  /* ---------- Счётчики ---------- */
+  const fmt = new Intl.NumberFormat('ru-RU');
+  const cio = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return; cio.unobserve(e.target);
+    const el = e.target, to = +el.dataset.to;
+    if (reduce) { el.textContent = fmt.format(to); return; }
+    const t0 = performance.now(), dur = 2200;
+    const step = t => { const k = clamp((t - t0) / dur); const v = 1 - Math.pow(1 - k, 4); el.textContent = fmt.format(Math.round(to * v)); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }), { threshold: 0.6 });
+  $$('.count').forEach(el => cio.observe(el));
+
+  /* ---------- Кастомный курсор ---------- */
+  let mx = innerWidth / 2, my = innerHeight / 2;
+  addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
+  if (fine && !reduce) {
+    document.body.classList.add('has-cursor');
+    const dot = $('.cursor-dot'), cloud = $('.cursor-cloud');
+    let cx = mx, cy = my;
+    const loop = () => {
+      cx = lerp(cx, mx, 0.14); cy = lerp(cy, my, 0.14);
+      dot.style.transform = `translate3d(${mx}px,${my}px,0)`;
+      cloud.style.transform = `translate3d(${cx}px,${cy}px,0)`;
+      requestAnimationFrame(loop);
+    };
+    loop();
+    document.addEventListener('pointerover', e => { if (e.target.closest('a,button,label,input')) cloud.classList.add('big'); });
+    document.addEventListener('pointerout', e => { if (e.target.closest('a,button,label,input')) cloud.classList.remove('big'); });
+    document.addEventListener('mouseleave', () => document.body.classList.remove('has-cursor'));
+    document.addEventListener('mouseenter', () => document.body.classList.add('has-cursor'));
+  }
+
+  /* ---------- Магнитные кнопки и ripple ---------- */
+  if (fine && !reduce) {
+    $$('.magnetic').forEach(b => {
+      b.addEventListener('pointermove', e => {
+        const r = b.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width / 2) * 0.3, y = (e.clientY - r.top - r.height / 2) * 0.4;
+        b.style.transform = `translate3d(${x}px,${y}px,0)`; b.style.transition = 'transform .15s';
+      });
+      b.addEventListener('pointerleave', () => { b.style.transform = ''; b.style.transition = 'transform .6s cubic-bezier(.22,.8,.26,1)'; });
+    });
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('.btn'); if (!b || reduce) return;
+    const r = b.getBoundingClientRect(), s = Math.max(r.width, r.height) * 2.2;
+    const sp = document.createElement('span'); sp.className = 'ripple';
+    const x = e.clientX ? e.clientX - r.left : r.width / 2, y = e.clientY ? e.clientY - r.top : r.height / 2;
+    sp.style.cssText = `width:${s}px;height:${s}px;left:${x - s / 2}px;top:${y - s / 2}px`;
+    b.appendChild(sp); setTimeout(() => sp.remove(), 750);
+  });
+
+  /* ---------- 3D-наклон ---------- */
+  if (fine && !reduce) {
+    $$('.tilt').forEach(c => {
+      c.addEventListener('pointermove', e => {
+        const r = c.getBoundingClientRect(); const px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+        c.style.transition = 'transform .12s'; c.style.transform = `perspective(900px) rotateX(${-py * 7}deg) rotateY(${px * 9}deg)`;
+      });
+      c.addEventListener('pointerleave', () => { c.style.transition = 'transform .7s cubic-bezier(.22,.8,.26,1)'; c.style.transform = ''; });
+    });
+  }
+
+  /* ---------- Перевёртыши ---------- */
+  $$('.flip').forEach(f => f.addEventListener('click', () => {
+    const on = !f.classList.contains('is-flipped');
+    f.classList.toggle('is-flipped', on); f.setAttribute('aria-pressed', on);
+  }));
+
+  /* ---------- Морфинг блобов: пауза вне первого экрана, выкл. на телефоне ---------- */
+  (function blobMorph() {
+    const svgs = $$('.blob svg');
+    if (reduce || !fine) { $$('.blob animate').forEach(a => a.remove()); return; }
+    new IntersectionObserver(([e]) => svgs.forEach(s => e.isIntersecting ? s.unpauseAnimations() : s.pauseAnimations()))
+      .observe($('#top'));
+  })();
+
+  /* ---------- Hero: нейроны на Canvas ---------- */
+  (function neurons() {
+    const cv = $('#neurons');
+    if (reduce || !fine || innerWidth < 768) { cv.remove(); return; }
+    const ctx = cv.getContext('2d'); let w, h, dpr, pts = [], running = true;
+    const resize = () => {
+      dpr = Math.min(devicePixelRatio || 1, 2); w = cv.offsetWidth; h = cv.offsetHeight;
+      cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.round(Math.min(55, w * h / 24000));
+      pts = Array.from({ length: n }, () => ({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3, r: Math.random() * 1.8 + .8, c: Math.random() < .5 ? '185,167,255' : (Math.random() < .5 ? '159,227,200' : '255,184,154') }));
+    };
+    resize(); addEventListener('resize', resize);
+    new IntersectionObserver(([e]) => { running = e.isIntersecting; if (running) requestAnimationFrame(draw); }).observe(cv);
+    function draw() {
+      if (!running) return;
+      ctx.clearRect(0, 0, w, h);
+      const rect = cv.getBoundingClientRect(); const lx = mx - rect.left, ly = my - rect.top;
+      for (const p of pts) {
+        const dx = lx - p.x, dy = ly - p.y, d = Math.hypot(dx, dy);
+        if (d < 180) { p.vx += dx / d * .015; p.vy += dy / d * .015; }
+        p.vx *= .985; p.vy *= .985; p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1; if (p.y < 0 || p.y > h) p.vy *= -1;
+      }
+      for (let a = 0; a < pts.length; a++) {
+        const p = pts[a];
+        for (let b = a + 1; b < pts.length; b++) {
+          const q = pts[b], dx2 = p.x - q.x, dy2 = p.y - q.y, d2 = dx2 * dx2 + dy2 * dy2;
+          if (d2 < 16900) { const d = Math.sqrt(d2); ctx.strokeStyle = `rgba(${p.c},${(1 - d / 130) * .35})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke(); }
+        }
+        const dm = Math.hypot(lx - p.x, ly - p.y);
+        if (dm < 180) { ctx.strokeStyle = `rgba(246,241,234,${(1 - dm / 180) * .4})`; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(lx, ly); ctx.stroke(); }
+        ctx.fillStyle = `rgba(${p.c},.9)`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
+  })();
+
+  /* ---------- Чек-ин настроения ---------- */
+  (function mood() {
+    const input = $('#mood'), label = $('#mood-label'), answer = $('#mood-answer');
+    const mouth = $('#mouth'), bl = $('#brow-l'), br = $('#brow-r'), faceBg = $('#face-bg'), eyes = $('#eyes');
+    const cl = $('#cheek-l'), cr = $('#cheek-r'), tLow = $('.tint.low'), tHigh = $('.tint.high');
+    const states = [
+      ['На дне', 'Сложно — это нормально. Давай разберёмся вместе. Честный ответ — уже первый шаг.'],
+      ['Так себе', 'Бывают серые дни. Им не нужно оправдание — только немного внимания к себе.'],
+      ['Ровно', 'Ровно — тоже хорошо. Самое время заметить, что тебя заряжает.'],
+      ['Хорошо', 'Здорово! Запомни, что помогло. Это пригодится в пасмурный день.'],
+      ['Отлично', 'Солнечно внутри! Забота о себе нужна и в хорошие дни — чтобы так и оставалось.']
+    ];
+    const stops = [[110, 119, 184], [185, 167, 255], [159, 227, 200], [255, 184, 154]];
+    const colorAt = v => { const x = v * (stops.length - 1), i = Math.min(stops.length - 2, Math.floor(x)), t = x - i; return `rgb(${stops[i].map((c, k) => Math.round(lerp(c, stops[i + 1][k], t))).join(',')})`; };
+    let target = .5, cur = .5, lastIdx = -1, animating = false;
+    function render(v) {
+      const cy = lerp(112, 162, v);
+      mouth.setAttribute('d', `M70 ${lerp(140, 134, v)} Q100 ${cy} 130 ${lerp(140, 134, v)}`);
+      const a = lerp(-16, 6, v);
+      bl.setAttribute('transform', `rotate(${a} 72 71) translate(0 ${lerp(2, -4, v)})`);
+      br.setAttribute('transform', `rotate(${-a} 128 71) translate(0 ${lerp(2, -4, v)})`);
+      const sy = lerp(1, .75, clamp((v - .6) / .4));
+      eyes.setAttribute('transform', `translate(0 94) scale(1 ${sy}) translate(0 -94)`);
+      faceBg.setAttribute('fill', colorAt(v));
+      cl.setAttribute('opacity', clamp((v - .55) / .45) * .7); cr.setAttribute('opacity', clamp((v - .55) / .45) * .7);
+      tLow.style.opacity = 1 - v; tHigh.style.opacity = v;
+    }
+    function setText(v) {
+      const idx = Math.min(4, Math.floor(v * 5));
+      if (idx === lastIdx) return; lastIdx = idx;
+      label.textContent = states[idx][0]; input.setAttribute('aria-valuetext', states[idx][0]);
+      answer.classList.add('swap');
+      setTimeout(() => { answer.textContent = states[idx][1]; answer.classList.remove('swap'); }, lastIdx === -1 ? 0 : 220);
+    }
+    const tick = () => { cur = reduce ? target : lerp(cur, target, .18); render(cur); if (Math.abs(cur - target) > .002) requestAnimationFrame(tick); else { animating = false; render(target); } };
+    input.addEventListener('input', () => { target = input.value / 100; setText(target); if (!animating) { animating = true; requestAnimationFrame(tick); } });
+    render(.5); setText(.5);
+  })();
+
+  /* ---------- Батарейка ---------- */
+  (function battery() {
+    const bat = $('#battery'), fill = $('#fill'), lo = $('#fill-lo'), hi = $('#fill-hi'), pct = $('#pct'), status = $('#battery-status');
+    let charge = 50;
+    function apply(delta, name) {
+      charge = clamp(charge + delta, 5, 100);
+      fill.style.transform = `scaleX(${charge / 100})`;
+      hi.style.opacity = clamp((charge - 30) / 50); lo.style.opacity = 1;
+      pct.textContent = charge + '%'; bat.setAttribute('aria-valuenow', charge);
+      const mood = charge < 30 ? 'Заряд на исходе. Пора подзарядиться — это не лень, а необходимость.' : charge < 70 ? 'Держится. Но без подзарядки долго не протянет.' : 'Заряд есть! Вот так и выглядит забота о себе.';
+      status.textContent = `${name}: ${delta > 0 ? '+' : ''}${delta}%. ${mood}`;
+    }
+    apply(0, 'Старт'); status.textContent = 'Держится. Посмотрим, что дальше.';
+    $$('.chip').forEach(chip => {
+      let sx = 0, sy = 0, dragging = false, down = false, suppress = false;
+      chip.addEventListener('pointerdown', e => { down = true; dragging = false; sx = e.clientX; sy = e.clientY; chip.setPointerCapture(e.pointerId); chip.classList.remove('back'); });
+      chip.addEventListener('pointermove', e => {
+        if (!down) return;
+        const dx = e.clientX - sx, dy = e.clientY - sy;
+        if (!dragging && Math.hypot(dx, dy) > 6) { dragging = true; chip.classList.add('dragging'); }
+        if (dragging) {
+          chip.style.transform = `translate3d(${dx}px,${dy}px,0) rotate(${clamp(dx / 20, -6, 6)}deg)`;
+          const r = bat.getBoundingClientRect();
+          bat.classList.toggle('over', e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom);
+        }
+      });
+      const end = e => {
+        if (!down) return; down = false;
+        if (dragging) {
+          suppress = true;
+          const r = bat.getBoundingClientRect();
+          if (e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom) apply(+chip.dataset.delta, chip.dataset.name);
+          bat.classList.remove('over'); chip.classList.remove('dragging'); chip.classList.add('back'); chip.style.transform = '';
+        }
+      };
+      chip.addEventListener('pointerup', end); chip.addEventListener('pointercancel', end);
+      chip.addEventListener('click', () => { if (suppress) { suppress = false; return; } apply(+chip.dataset.delta, chip.dataset.name); });
+    });
+  })();
+
+  /* ---------- Дыхание «квадрат» ---------- */
+  (function breath() {
+    const circle = $('#bcircle'), phaseEl = $('#bphase'), countEl = $('#bcount'), dot = $('#bdot'), sq = $('#bsq');
+    const start = $('#bstart'), stop = $('#bstop'), rounds = $('#brounds');
+    const phases = [{ n: 'Вдох', s: 1, c: [0, 0] }, { n: 'Пауза', s: 1, c: [1, 0] }, { n: 'Выдох', s: .55, c: [1, 1] }, { n: 'Пауза', s: .55, c: [0, 1] }];
+    let timer = null, phase = 0, sec = 4, done = 0;
+    const moveDot = c => { const w = sq.clientWidth; dot.style.transition = 'transform 4s linear'; dot.style.transform = `translate(${c[0] * w}px,${c[1] * w}px)`; };
+    function apply() { const p = phases[phase]; circle.style.transform = `scale(${p.s})`; phaseEl.textContent = p.n; moveDot(p.c); countEl.textContent = sec; }
+    function begin() {
+      if (timer) return; phase = 0; sec = 4; done = 0;
+      dot.style.transition = 'none'; dot.style.transform = `translate(0px,${sq.clientWidth}px)`; void dot.offsetWidth;
+      apply(); start.disabled = true; stop.disabled = false; rounds.textContent = 'Круг 1';
+      timer = setInterval(() => {
+        sec--;
+        if (sec === 0) { phase = (phase + 1) % 4; sec = 4; if (phase === 0) { done++; rounds.textContent = `Круг ${done + 1} · уже ${done} позади`; } apply(); }
+        else countEl.textContent = sec;
+      }, 1000);
+    }
+    function end() {
+      clearInterval(timer); timer = null; circle.style.transform = 'scale(.55)';
+      countEl.textContent = ''; start.disabled = false; stop.disabled = true;
+      phaseEl.textContent = done ? 'Хорошо' : 'Начнём?';
+      rounds.textContent = done ? `Позади кругов: ${done}. Как ощущения?` : '';
+    }
+    start.addEventListener('click', begin); stop.addEventListener('click', end);
+    dot.style.transform = `translate(0px,${sq.clientWidth}px)`;
+    addEventListener('resize', () => { if (!timer) { dot.style.transition = 'none'; dot.style.transform = `translate(0px,${sq.clientWidth}px)`; } });
+  })();
+
+  /* ---------- Заземление 5-4-3-2-1 ---------- */
+  (function ground() {
+    const steps = [
+      { n: 5, t: 'Назови 5 вещей, которые видишь', h: 'Лампа, окно, кружка… Не торопись.' },
+      { n: 4, t: 'Найди 4 вещи, которые можно потрогать', h: 'Ткань одежды, стол, телефон в руке.' },
+      { n: 3, t: 'Прислушайся к 3 звукам', h: 'Шум за окном, гул техники, своё дыхание.' },
+      { n: 2, t: 'Заметь 2 запаха', h: 'Если не получается — вспомни любимые.' },
+      { n: 1, t: 'Почувствуй 1 вкус', h: 'Или скажи себе одно доброе слово.' }
+    ];
+    const box = $('#gstep'), num = $('#gnum'), prog = $('#gprog'), next = $('#gnext'), back = $('#gback');
+    const C = 2 * Math.PI * 65; prog.style.strokeDasharray = C;
+    let i = 0;
+    const check = '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+    function content() {
+      if (i === steps.length) return `<b>Готово. Ты здесь, в этом моменте.</b><p class="muted">Заметь, как сейчас дышится. Можно вернуться к этому в любой момент.</p>`;
+      const s = steps[i];
+      return `<b>${s.t}</b><p class="muted">${s.h}</p><div class="marks" role="group" aria-label="Отмечай по одной">${Array.from({ length: s.n }, (_, k) => `<button class="mark" aria-pressed="false" aria-label="Нашлось: ${k + 1} из ${s.n}">${check}</button>`).join('')}</div>`;
+    }
+    function render(first) {
+      const go = () => {
+        box.innerHTML = content();
+        $$('.mark', box).forEach(m => m.addEventListener('click', () => m.setAttribute('aria-pressed', m.getAttribute('aria-pressed') !== 'true')));
+        num.textContent = i === steps.length ? '✓' : steps[i].n;
+        prog.style.strokeDashoffset = C * (1 - i / steps.length);
+        back.disabled = i === 0;
+        next.querySelector('.btn-in').textContent = i === steps.length ? 'Ещё раз' : i === steps.length - 1 ? 'Завершить' : 'Дальше';
+        box.classList.remove('out'); box.classList.add('pre'); void box.offsetWidth; box.classList.remove('pre');
+      };
+      if (first || reduce) return go();
+      box.classList.add('out'); setTimeout(go, 330);
+    }
+    next.addEventListener('click', () => { i = i === steps.length ? 0 : i + 1; render(); });
+    back.addEventListener('click', () => { if (i > 0) { i--; render(); } });
+    render(true);
+  })();
+
+  /* ---------- Чек-лист ---------- */
+  (function checklist() {
+    const boxes = $$('.check input'), v = $('#verdict');
+    const base = 'Это не приговор, а повод поговорить со специалистом — так же, как с врачом при боли.';
+    boxes.forEach(b => b.addEventListener('change', () => {
+      const n = boxes.filter(x => x.checked).length;
+      v.classList.toggle('lit', n >= 2);
+      v.textContent = n >= 2 ? `Ты узнаёшь в себе несколько сигналов. ${base}` : base;
+    }));
+  })();
+
+  /* ---------- Наверх ---------- */
+  $('#to-top').addEventListener('click', () => { scrollToY(0); $('#hero-title').setAttribute('tabindex', '-1'); setTimeout(() => $('#hero-title').focus({ preventScroll: true }), reduce ? 0 : 1600); });
+
+  /* ---------- Запуск ---------- */
+  function layout() { setupH(); measure(); update(); }
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', () => { clearTimeout(layout.t); layout.t = setTimeout(layout, 150); });
+  addEventListener('load', () => { initLenis(); layout(); });
+  if (document.fonts) document.fonts.ready.then(layout);
+  layout();
+})();
+</script>
+</body>
+</html>

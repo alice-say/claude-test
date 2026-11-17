@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Алиса — фронтенд-разработка и интерфейсы</title>
+<meta name="description" content="Делаю быстрые и понятные интерфейсы для веб-сервисов: от макета до продакшена. React, TypeScript, дизайн-системы.">
+<meta name="theme-color" content="#F3F0E8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Палитра: тёплая бумага, графит, глубокий зелёный и терракота.
+   Спокойная и «инженерная», без кислотных неоновых цветов. */
+:root{
+  --bg:#F3F0E8;
+  --surface:#FBFAF6;
+  --ink:#1A1E1C;
+  --muted:#5E6460;
+  --line:#DDD8CC;
+  --accent:#1F6B52;
+  --accent-ink:#F3F0E8;
+  --accent-soft:#DCE9E2;
+  --warm:#C4573A;
+  --dark:#16201C;
+  --r:14px;
+  --wrap:min(1200px, 100% - 64px);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --f-head:"Unbounded", system-ui, sans-serif;
+  --f-body:"Onest", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--f-body);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{width:var(--wrap);margin-inline:auto}
+.skip{position:absolute;left:16px;top:-60px;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;z-index:100}
+.skip:focus{top:16px}
+:focus-visible{outline:3px solid var(--warm);outline-offset:3px;border-radius:6px}
+
+/* ---------- Навигация ---------- */
+header{position:fixed;inset:0 0 auto;z-index:50;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+header.scrolled{border-color:var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:10px;font:700 17px var(--f-head);letter-spacing:-.02em}
+.logo i{width:34px;height:34px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-style:normal;font-size:15px;transition:transform .4s var(--ease)}
+.logo:hover i{transform:rotate(-8deg) scale(1.06)}
+.nav ul{display:flex;gap:32px;list-style:none}
+.nav ul a{position:relative;font-weight:500;color:var(--muted);transition:color .25s;padding:12px 0}
+.nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
+.nav ul a:hover{color:var(--ink)}
+.nav ul a:hover::after{transform:scaleX(1);transform-origin:left}
+
+/* ---------- Кнопки ---------- */
+.btn{--b:var(--ink);--c:var(--bg);display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;font:600 16px var(--f-body);background:var(--b);color:var(--c);border:1.5px solid var(--b);cursor:pointer;position:relative;overflow:hidden;isolation:isolate;
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease), background-color .3s, color .3s}
+.btn::before{content:"";position:absolute;inset:0;background:var(--accent);transform:translateY(101%);transition:transform .45s var(--ease);z-index:-1;border-radius:inherit}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(26,30,28,.45);border-color:var(--accent)}
+.btn:hover::before{transform:translateY(0)}
+.btn:active{transform:translateY(0) scale(.97);box-shadow:0 2px 6px -2px rgba(26,30,28,.4);transition-duration:.1s}
+.btn .arr{display:inline-block;transition:transform .35s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+.btn.ghost{--b:transparent;--c:var(--ink);border-color:var(--ink)}
+.btn.ghost::before{background:var(--ink)}
+.btn.ghost:hover{color:var(--bg);border-color:var(--ink)}
+.btn.small{min-height:44px;padding:0 20px;font-size:15px}
+
+/* ---------- Секции ---------- */
+section{min-height:100vh;display:flex;align-items:center;padding:120px 0 80px}
+.eyebrow{font:500 13px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:28px;height:1.5px;background:currentColor}
+h1,h2,h3{font-family:var(--f-head);letter-spacing:-.035em;line-height:1.05;font-weight:700}
+h1{font-size:clamp(40px,6vw,80px)}
+h2{font-size:clamp(32px,4.2vw,56px);max-width:16ch}
+h3{font-size:20px;letter-spacing:-.02em;line-height:1.25}
+.lead{font-size:clamp(17px,1.5vw,20px);color:var(--muted);max-width:46ch}
+
+/* ---------- Hero ---------- */
+.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:center}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .lead{margin:28px 0 36px}
+.actions{display:flex;flex-wrap:wrap;gap:14px}
+.facts{display:flex;gap:40px;margin-top:48px;padding-top:28px;border-top:1px solid var(--line)}
+.facts b{display:block;font:700 30px var(--f-head);letter-spacing:-.03em}
+.facts span{font-size:14px;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:500;background:var(--surface);border:1px solid var(--line);padding:6px 14px 6px 10px;border-radius:999px;margin-bottom:28px}
+.status i{width:8px;height:8px;border-radius:50%;background:#2E9E6E;box-shadow:0 0 0 0 rgba(46,158,110,.5);animation:ping 2.6s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 8px rgba(46,158,110,0)}100%{box-shadow:0 0 0 0 rgba(46,158,110,0)}}
+
+/* Редактор кода — «живой» интерфейс вместо стоковой картинки */
+.editor{background:var(--dark);border-radius:18px;box-shadow:0 40px 80px -30px rgba(22,32,28,.55);overflow:hidden;font:400 14.5px/1.75 var(--f-mono);color:#C9D4CE;transition:transform .5s var(--ease)}
+.editor:hover{transform:translateY(-4px)}
+.ed-bar{display:flex;align-items:center;gap:8px;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.07)}
+.ed-bar i{width:11px;height:11px;border-radius:50%;background:#3A4641}
+.ed-bar i:nth-child(1){background:#E0694F}.ed-bar i:nth-child(2){background:#E2B44E}.ed-bar i:nth-child(3){background:#4FB07F}
+.ed-tab{margin-left:14px;font-size:12.5px;color:#8FA098;background:rgba(255,255,255,.06);padding:4px 12px;border-radius:6px}
+.ed-body{padding:22px 0;counter-reset:ln}
+.ed-body div{padding:0 24px 0 0;white-space:pre;overflow:hidden}
+.ed-body div::before{counter-increment:ln;content:counter(ln);display:inline-block;width:46px;padding-right:18px;text-align:right;color:#4C5A54}
+.k{color:#E9967A}.s{color:#9ED3A8}.f{color:#E6C37A}.c{color:#64746D}.p{color:#8FC1E3}
+.ed-body .hl{background:rgba(79,176,127,.12)}
+.cursor{display:inline-block;width:8px;height:17px;background:#9ED3A8;vertical-align:-3px;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.ed-foot{display:flex;justify-content:space-between;padding:10px 18px;font-size:12px;color:#7C8C85;border-top:1px solid rgba(255,255,255,.07)}
+.ed-foot b{color:#9ED3A8;font-weight:500}
+
+/* ---------- Услуги ---------- */
+.head-row{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:56px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:32px;display:flex;flex-direction:column;gap:14px;transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s}
+.card:hover{transform:translateY(-2px);box-shadow:0 18px 40px -24px rgba(26,30,28,.35);border-color:#CFC9BA}
+.card p{color:var(--muted);font-size:16px}
+.card .num{font:500 13px var(--f-mono);color:var(--warm)}
+.card ul{list-style:none;margin-top:auto;padding-top:18px;border-top:1px dashed var(--line);display:flex;flex-wrap:wrap;gap:8px}
+.card li{font:500 12.5px var(--f-mono);background:var(--bg);padding:5px 10px;border-radius:6px}
+/* маленькая схема: вход → обработка → три потока */
+.mini{height:96px;margin-bottom:6px}
+.mini svg{width:100%;height:100%}
+.mini .ln{stroke:var(--line);stroke-width:2;fill:none}
+.mini .pulse{stroke:var(--accent);stroke-width:2;fill:none;stroke-dasharray:14 200;animation:run 3s linear infinite}
+.card:hover .mini .pulse{animation-duration:1.8s}
+@keyframes run{from{stroke-dashoffset:214}to{stroke-dashoffset:0}}
+
+/* ---------- Стек ---------- */
+.stack{background:var(--dark);color:#E9EEEA}
+.stack .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:72px;align-items:center}
+.stack .lead{color:#9AA8A1}
+.stack .eyebrow{color:#7CC7A2}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.chip{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:6px;transition:background-color .3s, transform .35s var(--ease), border-color .3s}
+.chip:hover{background:rgba(255,255,255,.05);transform:translateY(-2px);border-color:rgba(124,199,162,.45)}
+.chip b{font:600 16px var(--f-body)}
+.chip span{font:400 12.5px var(--f-mono);color:#7F8F88}
+.bar{height:4px;border-radius:2px;background:rgba(255,255,255,.08);margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:#7CC7A2;border-radius:2px;transform-origin:left;transition:transform .6s var(--ease)}
+.chip:hover .bar i{transform:scaleX(1.04)}
+
+/* ---------- Проекты ---------- */
+.work{display:grid;grid-template-columns:1.3fr 1fr;grid-template-rows:auto auto;gap:20px}
+.proj{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:transform .35s var(--ease), box-shadow .35s var(--ease)}
+.proj:hover{transform:translateY(-2px);box-shadow:0 22px 44px -26px rgba(26,30,28,.4)}
+.proj.big{grid-row:span 2}
+.shot{background:var(--accent-soft);padding:28px 28px 0;flex:1;display:flex;align-items:flex-end;overflow:hidden;min-height:200px}
+.shot.warm{background:#F2DED5}
+.shot.grey{background:#E4E1D8}
+.ui{background:#fff;border-radius:10px 10px 0 0;width:100%;padding:18px;box-shadow:0 -6px 30px -14px rgba(0,0,0,.2);transition:transform .5s var(--ease)}
+.proj:hover .ui{transform:scale(1.025) translateY(-4px)}
+.ui-top{display:flex;justify-content:space-between;align-items:center;font:600 13px var(--f-body);margin-bottom:14px}
+.ui-top em{font-style:normal;font:500 11px var(--f-mono);color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:5px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:120px}
+.bars i{flex:1;background:var(--accent);border-radius:4px 4px 0 0;opacity:.85;transform-origin:bottom;transition:transform .5s var(--ease)}
+.bars i:nth-child(odd){background:#8FC4AC}
+.proj:hover .bars i{transform:scaleY(1.06)}
+.row{display:flex;justify-content:space-between;font-size:13px;padding:9px 0;border-bottom:1px solid #EEE}
+.row:last-child{border:0}
+.row b{font-weight:600}
+.tag{font:500 11px var(--f-mono);padding:2px 8px;border-radius:5px;background:#E8F3EC;color:#1F6B52}
+.tag.w{background:#FBE7DF;color:#A3442B}
+.proj .meta{padding:24px 28px 28px;display:flex;justify-content:space-between;align-items:end;gap:20px}
+.proj .meta p{color:var(--muted);font-size:15px;margin-top:6px}
+.go{flex:none;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;transition:background-color .3s, color .3s, transform .35s var(--ease)}
+.proj:hover .go{background:var(--ink);color:var(--bg);transform:rotate(-45deg)}
+
+/* ---------- Контакты ---------- */
+.contact{text-align:left}
+.contact .big-mail{display:inline-block;font:700 clamp(30px,6vw,84px)/1 var(--f-head);letter-spacing:-.04em;margin:28px 0 40px;position:relative;padding-bottom:8px;word-break:break-word}
+.contact .big-mail::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--accent);transform:scaleX(.18);transform-origin:left;transition:transform .6s var(--ease)}
+.contact .big-mail:hover::after{transform:scaleX(1)}
+.contact-row{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;padding-top:32px;border-top:1px solid var(--line)}
+.links{display:flex;gap:12px;flex-wrap:wrap}
+
+footer{padding:28px 0;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* ---------- Появление героя при загрузке ---------- */
+[data-enter] > *{opacity:0;transform:translateY(18px);animation:enter .9s var(--ease) forwards}
+[data-enter] > *:nth-child(2){animation-delay:.15s}
+@keyframes enter{to{opacity:1;transform:none}}
+.hero-text > *{opacity:0;transform:translateY(14px);animation:enter .8s var(--ease) forwards}
+.hero-text > *:nth-child(2){animation-delay:.08s}
+.hero-text > *:nth-child(3){animation-delay:.16s}
+.hero-text > *:nth-child(4){animation-delay:.24s}
+.hero-text > *:nth-child(5){animation-delay:.32s}
+
+/* ---------- Адаптив ---------- */
+@media (max-width:1024px){
+  .hero .wrap,.stack .wrap{grid-template-columns:1fr;gap:56px}
+  .grid3{grid-template-columns:1fr 1fr}
+  .grid3 .card:last-child{grid-column:span 2}
+  .work{grid-template-columns:1fr 1fr}
+  .proj.big{grid-row:auto;grid-column:span 2}
+}
+@media (max-width:720px){
+  :root{--wrap:calc(100% - 40px)}
+  .nav ul{display:none}
+  section{min-height:auto;padding:110px 0 72px}
+  .hero{min-height:100svh}
+  .head-row{flex-direction:column;align-items:flex-start}
+  .grid3,.work{grid-template-columns:1fr}
+  .grid3 .card:last-child,.proj.big{grid-column:auto}
+  .chips{grid-template-columns:1fr 1fr}
+  .actions .btn{width:100%;justify-content:center}
+  .facts{gap:24px;flex-wrap:wrap}
+  .editor{font-size:12.5px}
+  .ed-body div::before{width:34px;padding-right:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  [data-enter] > *,.hero-text > *{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Перейти к содержанию</a>
+
+<header id="top">
+  <nav class="wrap nav" aria-label="Основная навигация">
+    <a class="logo" href="#main"><i>А</i>Алиса</a>
+    <ul>
+      <li><a href="#services">Услуги</a></li>
+      <li><a href="#stack">Стек</a></li>
+      <li><a href="#work">Проекты</a></li>
+      <li><a href="#contact">Контакты</a></li>
+    </ul>
+    <a class="btn small" href="#contact">Обсудить проект</a>
+  </nav>
+</header>
+
+<main id="main">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap" data-enter>
+      <div class="hero-text">
+        <span class="status"><i></i>Беру проекты на декабрь</span>
+        <h1>Фронтенд, который <em>понятен</em> людям</h1>
+        <p class="lead">Делаю интерфейсы для веб-сервисов: от макета в Figma до кода в продакшене. React, TypeScript и дизайн-системы, которые не разваливаются через полгода.</p>
+        <div class="actions">
+          <a class="btn" href="#contact">Обсудить проект <span class="arr">→</span></a>
+          <a class="btn ghost" href="#work">Смотреть работы</a>
+        </div>
+        <div class="facts">
+          <div><b>6 лет</b><span>в разработке</span></div>
+          <div><b>40+</b><span>запущенных проектов</span></div>
+          <div><b>98</b><span>Lighthouse в среднем</span></div>
+        </div>
+      </div>
+
+      <div class="editor" aria-hidden="true">
+        <div class="ed-bar"><i></i><i></i><i></i><span class="ed-tab">Button.tsx</span></div>
+        <div class="ed-body">
+          <div><span class="k">import</span> { motion } <span class="k">from</span> <span class="s">'framer-motion'</span></div>
+          <div> </div>
+          <div><span class="k">export function</span> <span class="f">Button</span>({ <span class="p">children</span> }) {</div>
+          <div>  <span class="k">return</span> (</div>
+          <div class="hl">    &lt;<span class="f">motion.button</span></div>
+          <div class="hl">      <span class="p">whileHover</span>={{ y: <span class="s">-2</span> }}</div>
+          <div class="hl">      <span class="p">whileTap</span>={{ scale: <span class="s">0.97</span> }}</div>
+          <div>    &gt;</div>
+          <div>      {<span class="p">children</span>}</div>
+          <div>    &lt;/<span class="f">motion.button</span>&gt;</div>
+          <div>  )</div>
+          <div>}<span class="cursor"></span></div>
+        </div>
+        <div class="ed-foot"><span>TypeScript · UTF-8</span><b>✓ 0 ошибок</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Услуги -->
+  <section id="services">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <p class="eyebrow">Чем помогаю</p>
+          <h2>Три задачи, с которыми ко мне приходят</h2>
+        </div>
+        <p class="lead">Работаю напрямую с командой, без посредников. Один человек отвечает за результат.</p>
+      </div>
+      <div class="grid3">
+        <article class="card">
+          <div class="mini"><svg viewBox="0 0 300 96" aria-hidden="true">
+            <path class="ln" d="M10 48 H110"/><rect x="110" y="28" width="80" height="40" rx="8" fill="none" stroke="#1F6B52" stroke-width="2"/>
+            <path class="ln" d="M190 48 C230 48 230 16 290 16 M190 48 H290 M190 48 C230 48 230 80 290 80"/>
+            <path class="pulse" d="M10 48 H110"/><path class="pulse" d="M190 48 H290"/>
+          </svg></div>
+          <span class="num">01</span>
+          <h3>Интерфейс веб-сервиса с нуля</h3>
+          <p>Личные кабинеты, админки, дашборды. Продумываю состояния, ошибки и пустые экраны, а не только красивый первый вид.</p>
+          <ul><li>React</li><li>Next.js</li><li>TypeScript</li></ul>
+        </article>
+        <article class="card">
+          <div class="mini"><svg viewBox="0 0 300 96" aria-hidden="true">
+            <circle cx="150" cy="48" r="20" fill="none" stroke="#1F6B52" stroke-width="2"/>
+            <path class="ln" d="M130 48 H40 M170 48 H260 M150 28 V6 M150 68 V90"/>
+            <circle cx="30" cy="48" r="8" fill="#DCE9E2"/><circle cx="270" cy="48" r="8" fill="#DCE9E2"/>
+            <path class="pulse" d="M130 48 H40"/><path class="pulse" d="M170 48 H260"/>
+          </svg></div>
+          <span class="num">02</span>
+          <h3>Дизайн-система и UI-кит</h3>
+          <p>Собираю компоненты, токены и документацию, чтобы дизайнеры и разработчики говорили на одном языке.</p>
+          <ul><li>Storybook</li><li>Figma</li><li>CSS-токены</li></ul>
+        </article>
+        <article class="card">
+          <div class="mini"><svg viewBox="0 0 300 96" aria-hidden="true">
+            <path class="ln" d="M10 80 L80 62 L140 70 L200 34 L290 14"/>
+            <path class="pulse" d="M10 80 L80 62 L140 70 L200 34 L290 14"/>
+            <circle cx="290" cy="14" r="5" fill="#C4573A"/>
+          </svg></div>
+          <span class="num">03</span>
+          <h3>Ускорение медленного сайта</h3>
+          <p>Нахожу, что тормозит загрузку, и чиню. Обычно страница начинает открываться в два-три раза быстрее.</p>
+          <ul><li>Core Web Vitals</li><li>Lighthouse</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Стек -->
+  <section class="stack" id="stack">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Инструменты</p>
+        <h2>Стек, на котором пишу каждый день</h2>
+        <p class="lead" style="margin-top:24px">Выбираю технологии под задачу, а не под моду. Если проекту хватит чистого HTML и CSS, так и скажу.</p>
+      </div>
+      <div class="chips">
+        <div class="chip"><b>React</b><span>6 лет</span><div class="bar"><i style="width:95%"></i></div></div>
+        <div class="chip"><b>TypeScript</b><span>5 лет</span><div class="bar"><i style="width:90%"></i></div></div>
+        <div class="chip"><b>Next.js</b><span>4 года</span><div class="bar"><i style="width:85%"></i></div></div>
+        <div class="chip"><b>CSS / Sass</b><span>6 лет</span><div class="bar"><i style="width:95%"></i></div></div>
+        <div class="chip"><b>Node.js</b><span>3 года</span><div class="bar"><i style="width:65%"></i></div></div>
+        <div class="chip"><b>Figma</b><span>5 лет</span><div class="bar"><i style="width:80%"></i></div></div>
+        <div class="chip"><b>Vue</b><span>2 года</span><div class="bar"><i style="width:55%"></i></div></div>
+        <div class="chip"><b>Playwright</b><span>3 года</span><div class="bar"><i style="width:70%"></i></div></div>
+        <div class="chip"><b>Git</b><span>6 лет</span><div class="bar"><i style="width:90%"></i></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Проекты -->
+  <section id="work">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <p class="eyebrow">Избранные работы</p>
+          <h2>Проекты последних двух лет</h2>
+        </div>
+      </div>
+      <div class="work">
+        <a class="proj big" href="#contact">
+          <div class="shot">
+            <div class="ui">
+              <div class="ui-top">Выручка по месяцам <em>+24%</em></div>
+              <div class="bars">
+                <i style="height:38%"></i><i style="height:52%"></i><i style="height:45%"></i><i style="height:63%"></i>
+                <i style="height:58%"></i><i style="height:72%"></i><i style="height:69%"></i><i style="height:84%"></i>
+                <i style="height:78%"></i><i style="height:92%"></i>
+              </div>
+            </div>
+          </div>
+          <div class="meta">
+            <div><h3>Аналитика для сети кофеен</h3><p>Дашборд для владельцев: продажи, остатки и смены в одном окне.</p></div>
+            <span class="go" aria-hidden="true">→</span>
+          </div>
+        </a>
+        <a class="proj" href="#contact">
+          <div class="shot warm">
+            <div class="ui">
+              <div class="row"><b>Заказ #2481</b><span class="tag">Оплачен</span></div>
+              <div class="row"><b>Заказ #2480</b><span class="tag w">В пути</span></div>
+              <div class="row"><b>Заказ #2479</b><span class="tag">Оплачен</span></div>
+            </div>
+          </div>
+          <div class="meta">
+            <div><h3>Кабинет интернет-магазина</h3><p>Заказы, возвраты и чат с поддержкой.</p></div>
+            <span class="go" aria-hidden="true">→</span>
+          </div>
+        </a>
+        <a class="proj" href="#contact">
+          <div class="shot grey">
+            <div class="ui">
+              <div class="row"><b>LCP</b><span>4,1 с → 1,3 с</span></div>
+              <div class="row"><b>CLS</b><span>0,32 → 0,02</span></div>
+              <div class="row"><b>Вес JS</b><span>1,8 МБ → 420 КБ</span></div>
+            </div>
+          </div>
+          <div class="meta">
+            <div><h3>Ускорение медиа-портала</h3><p>Загрузка в три раза быстрее за месяц.</p></div>
+            <span class="go" aria-hidden="true">→</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Контакты -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <p class="eyebrow">Связаться</p>
+      <h2>Расскажите о задаче, отвечу в течение дня</h2>
+      <a class="big-mail" href="mailto:hello@alisa.example">hello@alisa.example</a>
+      <div class="contact-row">
+        <p class="lead">Работаю удалённо, по Москве встречаюсь лично.</p>
+        <div class="links">
+          <a class="btn" href="mailto:hello@alisa.example">Написать письмо <span class="arr">→</span></a>
+          <a class="btn ghost" href="https://t.me/" target="_blank" rel="noopener">Telegram</a>
+          <a class="btn ghost" href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Алиса. Фронтенд-разработка.</span>
+    <a href="#main">Наверх ↑</a>
+  </div>
+</footer>
+
+<script>
+  const h = document.getElementById('top');
+  addEventListener('scroll', () => h.classList.toggle('scrolled', scrollY > 10), { passive: true });
+</script>
+</body>
+</html>
